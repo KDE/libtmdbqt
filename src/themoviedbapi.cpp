@@ -1,0 +1,87 @@
+/*
+ * Copyright (C) 2014 David Faure <faure@kde.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#include "themoviedbapi.h"
+#include "searchjob.h"
+#include "configuration_p.h"
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QUrl>
+using namespace TmdbQt;
+
+class TmdbQt::TheMovieDbApiPrivate
+{
+public:
+    QString m_apiKey;
+    QNetworkAccessManager *m_qnam;
+    QNetworkReply *m_configurationReply;
+    Configuration m_configuration;
+
+    QUrl baseUrl() const;
+};
+
+TheMovieDbApi::TheMovieDbApi(const QString &apiKey)
+    : d(new TheMovieDbApiPrivate)
+{
+    d->m_apiKey = apiKey;
+    d->m_qnam = new QNetworkAccessManager(this);
+    QUrl url = d->baseUrl();
+    url.setPath(url.path() + QLatin1String("configuration"));
+    //qDebug() << url;
+    QNetworkRequest request(url);
+    d->m_configurationReply = d->m_qnam->get(request);
+    connect(d->m_configurationReply, SIGNAL(finished()), this, SLOT(slotConfigurationReady()));
+}
+
+TheMovieDbApi::~TheMovieDbApi()
+{
+    delete d;
+}
+
+SearchJob *TheMovieDbApi::searchMovie(const QString &movieName, int searchYear, const QString &language)
+{
+    return new SearchJob(d->m_qnam, d->baseUrl(), movieName, searchYear, language);
+}
+
+Configuration TheMovieDbApi::configuration() const
+{
+    return d->m_configuration;
+}
+
+void TheMovieDbApi::slotConfigurationReady()
+{
+    const QByteArray data = d->m_configurationReply->readAll();
+    QJsonDocument doc = QJsonDocument::fromJson(data);
+    QJsonObject root = doc.object();
+    d->m_configuration.load(root);
+    emit initialized();
+    d->m_configurationReply->deleteLater();
+    d->m_configurationReply = 0;
+}
+
+QUrl TheMovieDbApiPrivate::baseUrl() const
+{
+    static const char s_tmdbApiUrl[] = "http://api.themoviedb.org/3/";
+    QUrl url(QString::fromLatin1(s_tmdbApiUrl));
+    url.addQueryItem(QLatin1String("api_key"), m_apiKey);
+    return url;
+}
