@@ -19,11 +19,13 @@
 
 */
 
+#undef QT_NO_CAST_FROM_ASCII
 #include <QTest>
 #include <QSignalSpy>
 #include <themoviedbapi.h>
 #include <searchjob.h>
 #include <creditsjob.h>
+#include <movieinfojob.h>
 #include <QDebug>
 
 using namespace TmdbQt;
@@ -37,6 +39,8 @@ public:
 
 private slots:
     void testSearch();
+    void testMovieInfo();
+    void testMovieInfoFightClub();
     void testCredits();
 
 private:
@@ -68,11 +72,41 @@ void SearchTest::testSearch()
     QCOMPARE(movie.originalTitle(), title);
     QVERIFY(movie.backdropPath().contains(QLatin1String(".jpg")));
     QVERIFY(movie.posterPath().contains(QLatin1String(".jpg")));
+    QCOMPARE(movie.overview(), QString()); // not included here, needs MovieInfoJob
 
     const QString backdrop = movie.backdropUrl(QLatin1String("w92")).toString();
     QVERIFY2(backdrop.startsWith(QLatin1String("http://image.tmdb.org/t/p/w92/")), qPrintable(backdrop));
     const QString poster = movie.posterUrl(QLatin1String("w92")).toString();
     QVERIFY2(poster.startsWith(QLatin1String("http://image.tmdb.org/t/p/w92/")), qPrintable(poster));
+}
+
+void SearchTest::testMovieInfo()
+{
+    MovieInfoJob *job = m_api.getMovieInfo(15709);
+    QSignalSpy spy(job, SIGNAL(result(MovieInfoJob*)));
+    QVERIFY(spy.wait());
+    QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
+
+    MovieDb movie = job->result();
+    QCOMPARE(movie.overview(), QStringLiteral("Ariane and Hugo decide to exchange the lives they lead to escape from their routine, which after ten years of marriage, gives them the feeling of being hamsters in a wheel. She suddenly finds herself at the head of a construction equipment rental company and he tries to take the role of a house calling jewelry salesman...But is life really better when you live it on the other side of the bed?"));
+    QCOMPARE(movie.productionCompanyNames(), QStringList() << "Fidélité Films" << "TF1 Films Production" << "Orange Cinéma Séries" << "Wild Bunch" << "Mars Distribution" << "Procirep");
+    QCOMPARE(movie.budget(), 0); // not filled in
+    QCOMPARE(movie.revenue(), 0); // not filled in
+    QCOMPARE(movie.runtime(), 93);
+}
+
+void SearchTest::testMovieInfoFightClub()
+{
+    MovieInfoJob *job = m_api.getMovieInfo(550);
+    QSignalSpy spy(job, SIGNAL(result(MovieInfoJob*)));
+    QVERIFY(spy.wait());
+    QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
+
+    MovieDb movie = job->result();
+    QCOMPARE(movie.productionCompanyNames(), QStringList() << "20th Century Fox" << "Fox 2000 Pictures" << "Regency Enterprises");
+    QCOMPARE(movie.budget(), 63000000);
+    QCOMPARE(movie.revenue(), 100853753);
+    QCOMPARE(movie.runtime(), 139);
 }
 
 void SearchTest::testCredits()

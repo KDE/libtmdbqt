@@ -22,6 +22,7 @@ set(tmdbqt_SRCS
    themoviedbapi.cpp
    searchjob.cpp
    creditsjob.cpp
+   movieinfojob.cpp
    configuration.cpp
    moviedblist.cpp
    moviedb.cpp
@@ -69,6 +70,7 @@ set(TMDBQT_HEADERS
    themoviedbapi.h
    searchjob.h
    creditsjob.h
+   movieinfojob.h
    configuration.h
    moviedblist.h
    moviedb.h

@@ -21,6 +21,7 @@
 #include "configuration.h"
 
 #include <QDebug>
+#include <QJsonArray>
 #include <QJsonObject>
 
 using namespace TmdbQt;
@@ -29,7 +30,12 @@ class TmdbQt::MovieDbPrivate : public QSharedData
 {
 public:
     MovieDbPrivate(const Configuration &config)
-        : m_configuration(config) {}
+        : m_configuration(config),
+          m_id(-1),
+          m_budget(0),
+          m_revenue(0),
+          m_runtime(0)
+    {}
 
     const Configuration &m_configuration;
     QString m_backdropPath;
@@ -38,6 +44,11 @@ public:
     QDate m_releaseDate;
     QString m_posterPath;
     QString m_title;
+    int m_budget;
+    QString m_overview;
+    QStringList m_productionCompanyNames;
+    int m_revenue;
+    int m_runtime;
 };
 
 MovieDb::MovieDb(const Configuration &configuration)
@@ -90,6 +101,31 @@ QString MovieDb::title() const
     return d->m_title;
 }
 
+int MovieDb::budget() const
+{
+    return d->m_budget;
+}
+
+QString MovieDb::overview() const
+{
+    return d->m_overview;
+}
+
+QStringList MovieDb::productionCompanyNames() const
+{
+    return d->m_productionCompanyNames;
+}
+
+int MovieDb::revenue() const
+{
+    return d->m_revenue;
+}
+
+int MovieDb::runtime() const
+{
+    return d->m_runtime;
+}
+
 QUrl MovieDb::backdropUrl(const QString &size) const
 {
     QUrl url = d->m_configuration.imageBaseUrl();
@@ -113,4 +149,15 @@ void MovieDb::load(const QJsonObject &json)
     d->m_releaseDate = QDate::fromString(releaseDate, Qt::ISODate);
     d->m_posterPath = json.value(QStringLiteral("poster_path")).toString();
     d->m_title = json.value(QStringLiteral("title")).toString();
+
+    d->m_budget = json.value(QStringLiteral("budget")).toInt();
+    d->m_overview = json.value(QStringLiteral("overview")).toString();
+    const QJsonArray productionCompanies = json.value(QStringLiteral("production_companies")).toArray();
+    for (int i = 0; i < productionCompanies.count() ; ++i) {
+        const QJsonObject obj = productionCompanies.at(i).toObject();
+        d->m_productionCompanyNames << obj.value(QStringLiteral("name")).toString();
+    }
+    d->m_revenue = json.value(QStringLiteral("revenue")).toInt();
+    d->m_runtime = json.value(QStringLiteral("runtime")).toInt();
+
 }

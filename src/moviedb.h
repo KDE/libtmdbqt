@@ -24,6 +24,7 @@
 #include <QString>
 #include <QDate>
 #include <QSharedDataPointer>
+#include <QStringList>
 class QJsonObject;
 
 namespace TmdbQt
@@ -31,6 +32,7 @@ namespace TmdbQt
 class MovieDbList;
 class Configuration;
 class MovieDbPrivate;
+class MovieInfoJob;
 
 class TMDBQT_EXPORT MovieDb
 {
@@ -47,11 +49,19 @@ public:
     QString posterPath() const;
     QString title() const;
 
+    // More details (requires MovieInfoJob)
+    int budget() const;
+    QString overview() const;
+    QStringList productionCompanyNames() const;
+    int revenue() const;
+    int runtime() const; // in minutes
+
     QUrl backdropUrl(const QString &size) const;
     QUrl posterUrl(const QString &size) const;
 
 private:
     friend class MovieDbList;
+    friend class MovieInfoJob;
     void load(const QJsonObject &json);
 
     QSharedDataPointer<MovieDbPrivate> d;

@@ -8,7 +8,8 @@ This library can retrieve information about movies from the Tmdb web service.
 
 Features:
 - Search a movie with a text query
-- Get movie details
+- Get movie details (overview, runtime etc.)
+- Get movie cast and crew information
 
 Planned features:
 - Searching and retrieving details for TV series

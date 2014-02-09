@@ -20,6 +20,7 @@
 #include "themoviedbapi.h"
 #include "searchjob.h"
 #include "creditsjob.h"
+#include "movieinfojob.h"
 #include "configuration.h"
 #include "jobparams_p.h"
 #include <QNetworkAccessManager>
@@ -64,6 +65,11 @@ TheMovieDbApi::~TheMovieDbApi()
 SearchJob *TheMovieDbApi::searchMovie(const QString &movieName, int searchYear, const QString &language)
 {
     return new SearchJob(d->m_jobParams, d->baseUrl(), movieName, searchYear, language);
+}
+
+MovieInfoJob *TheMovieDbApi::getMovieInfo(int movieId)
+{
+    return new MovieInfoJob(d->m_jobParams, d->baseUrl(), movieId);
 }
 
 CreditsJob *TheMovieDbApi::getCredits(int movieId)
