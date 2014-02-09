@@ -20,5 +20,5 @@ Planned features:
 - Mailing list: None
 - Author: David Faure <faure@kde.org>
 - IRC channel: #kde-devel on Freenode
-- Git repository: to come
+- Git repository: git@git.kde.org:scratch/dfaure/libtmdbqt for now
 
