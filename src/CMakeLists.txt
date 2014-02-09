@@ -21,9 +21,12 @@ configure_file(tmdbqt_export.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/tmdbqt_export.h
 set(tmdbqt_SRCS
    themoviedbapi.cpp
    searchjob.cpp
+   creditsjob.cpp
    configuration.cpp
    moviedblist.cpp
    moviedb.cpp
+   personlist.cpp
+   person.cpp
 )
 
 
@@ -65,9 +68,12 @@ set(TMDBQT_HEADERS
     ${CMAKE_CURRENT_BINARY_DIR}/tmdbqt_export.h
    themoviedbapi.h
    searchjob.h
+   creditsjob.h
    configuration.h
    moviedblist.h
    moviedb.h
+   personlist.h
+   person.h
 )
 
 if (Qt5Core_FOUND)

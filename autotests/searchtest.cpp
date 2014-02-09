@@ -23,6 +23,7 @@
 #include <QSignalSpy>
 #include <themoviedbapi.h>
 #include <searchjob.h>
+#include <creditsjob.h>
 #include <QDebug>
 
 using namespace TmdbQt;
@@ -31,21 +32,33 @@ class SearchTest : public QObject
 {
     Q_OBJECT
 
+public:
+    SearchTest();
+
 private slots:
     void testSearch();
+    void testCredits();
+
+private:
+    TheMovieDbApi m_api;
 };
 
 static const char s_key[] = "6c125ca74f059b4c88bc49e1b09e241e"; // themoviedb.org api key given to David Faure for KVideoManager
 
+SearchTest::SearchTest()
+    : m_api(QString::fromLatin1(s_key))
+{
+    QSignalSpy initSpy(&m_api, SIGNAL(initialized()));
+    QVERIFY(initSpy.wait());
+}
+
 void SearchTest::testSearch()
 {
-    TheMovieDbApi api(QString::fromLatin1(s_key));
-    QSignalSpy initSpy(&api, SIGNAL(initialized()));
-    QVERIFY(initSpy.wait());
     const QString title = QString::fromUtf8("De l'autre côté du lit");
-    SearchJob *job = api.searchMovie(title);
+    SearchJob *job = m_api.searchMovie(title);
     QSignalSpy spy(job, SIGNAL(result(SearchJob*)));
     QVERIFY(spy.wait());
+    QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
     MovieDbList movies = job->result();
     QCOMPARE(movies.count(), 1);
     MovieDb movie = movies.first();
@@ -58,6 +71,30 @@ void SearchTest::testSearch()
 
     const QString backdrop = movie.backdropUrl(QLatin1String("w92")).toString();
     QVERIFY2(backdrop.startsWith(QLatin1String("http://image.tmdb.org/t/p/w92/")), qPrintable(backdrop));
+    const QString poster = movie.posterUrl(QLatin1String("w92")).toString();
+    QVERIFY2(poster.startsWith(QLatin1String("http://image.tmdb.org/t/p/w92/")), qPrintable(poster));
+}
+
+void SearchTest::testCredits()
+{
+    CreditsJob *job = m_api.getCredits(15709);
+    QSignalSpy spy(job, SIGNAL(result(CreditsJob*)));
+    QVERIFY(spy.wait());
+    QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
+    PersonList cast = job->cast();
+    QCOMPARE(cast.count(), 14);
+    const Person firstPerson = cast.at(0);
+    QCOMPARE(firstPerson.name(), QStringLiteral("Dany Boon"));
+    QCOMPARE(firstPerson.character(), QStringLiteral("Hugo Marciac"));
+    QVERIFY2(firstPerson.profilePath().contains(QLatin1String(".jpg")), qPrintable(firstPerson.profilePath()));
+    // TODO profileUrl
+
+    PersonList crew = job->crew();
+    QCOMPARE(crew.count(), 11);
+    const Person firstCrew = crew.at(0);
+    QCOMPARE(firstCrew.name(), QStringLiteral("Pascale Pouzadoux"));
+    QCOMPARE(firstCrew.department(), QStringLiteral("Directing"));
+    QCOMPARE(firstCrew.job(), QStringLiteral("Director"));
 }
 
 QTEST_MAIN(SearchTest)

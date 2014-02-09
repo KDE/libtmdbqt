@@ -17,49 +17,45 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _TMDBQT_THEMOVIEDBAPI_H_
-#define _TMDBQT_THEMOVIEDBAPI_H_
+#ifndef _TMDBQT_PERSON_H
+#define _TMDBQT_PERSON_H
 
 #include "tmdbqt_export.h"
-#include <QObject>
+#include <QString>
+#include <QSharedDataPointer>
+class QJsonObject;
 
 namespace TmdbQt
 {
-class SearchJob;
-class CreditsJob;
+class PersonList;
 class Configuration;
-class TheMovieDbApiPrivate;
+class PersonPrivate;
 
-/**
- * @brief The TheMovieDbApi class provides the main API for accessing
- * TheMovieDatabase.org (also known as TMDB).
- */
-class TMDBQT_EXPORT TheMovieDbApi : public QObject
+class TMDBQT_EXPORT Person
 {
-    Q_OBJECT
 public:
-    TheMovieDbApi(const QString &apiKey);
-    ~TheMovieDbApi();
+    Person(const Configuration &configuration);
+    Person(const Person &other);
+    ~Person();
+    Person &operator=(const Person &other);
 
-    SearchJob *searchMovie(const QString &movieName,
-                           int searchYear = 0,
-                           const QString &language = QString());
+    enum PersonType { Cast, Crew };
 
-    CreditsJob *getCredits(int movieId);
+    PersonType personType() const;
 
-    Configuration &configuration() const;
+    QString name() const;
+    QString character() const; // for Cast members only
+    QString profilePath() const;
 
-Q_SIGNALS:
-    /**
-     * Emitted when the initialization is done. Wait for this signal before calling other methods!
-     */
-    void initialized();
+    QString department() const; // for Crew members only
+    QString job() const; // for Crew members only
 
-private Q_SLOTS:
-    void slotConfigurationReady();
 
 private:
-    TheMovieDbApiPrivate *d;
+    friend class PersonList;
+    void load(const QJsonObject &json, PersonType personType);
+
+    QSharedDataPointer<PersonPrivate> d;
 };
 
 } // namespace
