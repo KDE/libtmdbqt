@@ -52,8 +52,7 @@ private Q_SLOTS:
 
 private:
     friend class TheMovieDbApi;
-    CreditsJob(const JobParams &params, const QUrl &baseUrl,
-              int movieId);
+    CreditsJob(const JobParams &params, int movieId);
     ~CreditsJob();
 
     CreditsJobPrivate *d;

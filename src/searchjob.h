@@ -49,7 +49,7 @@ private Q_SLOTS:
 
 private:
     friend class TheMovieDbApi;
-    SearchJob(const JobParams &params, const QUrl &baseUrl, const QString &movieName,
+    SearchJob(const JobParams &params, const QString &movieName,
               int searchYear, const QString &language);
     ~SearchJob();
 

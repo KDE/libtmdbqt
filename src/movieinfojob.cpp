@@ -40,10 +40,10 @@ public:
     const JobParams &m_params;
 };
 
-MovieInfoJob::MovieInfoJob(const JobParams &params, const QUrl &baseUrl, int movieId)
+MovieInfoJob::MovieInfoJob(const JobParams &params, int movieId)
     : d(new MovieInfoJobPrivate(params))
 {
-    QUrl url = baseUrl;
+    QUrl url = params.baseUrl;
     url.setPath(url.path() + QStringLiteral("/movie/%1").arg(movieId));
 
     QNetworkRequest request(url);

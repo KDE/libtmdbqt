@@ -49,7 +49,7 @@ private Q_SLOTS:
 
 private:
     friend class TheMovieDbApi;
-    MovieInfoJob(const JobParams &params, const QUrl &baseUrl, int movieId);
+    MovieInfoJob(const JobParams &params, int movieId);
     ~MovieInfoJob();
 
     MovieInfoJobPrivate *d;

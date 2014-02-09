@@ -21,6 +21,7 @@
 #define _TMDBQT_JOBPARAMS_P_H_
 
 #include "tmdbqt_export.h"
+#include <QUrl>
 
 class QNetworkAccessManager;
 
@@ -28,14 +29,21 @@ namespace TmdbQt
 {
 class Configuration;
 
+/**
+ * @brief The JobParams class puts together parameters passed to jobs.
+ * @internal
+ */
 class JobParams
 {
 public:
     JobParams(QNetworkAccessManager &nam, Configuration &config)
         : qnam(nam), configuration(config) {}
 
+    void setBaseUrl(const QUrl &url) { baseUrl = url; }
+
     QNetworkAccessManager &qnam;
     Configuration &configuration;
+    QUrl baseUrl;
 };
 
 } // namespace

@@ -42,10 +42,10 @@ public:
     const JobParams &m_params;
 };
 
-CreditsJob::CreditsJob(const JobParams &params, const QUrl &baseUrl, int movieId)
+CreditsJob::CreditsJob(const JobParams &params, int movieId)
     : d(new CreditsJobPrivate(params))
 {
-    QUrl url = baseUrl;
+    QUrl url = params.baseUrl;
     url.setPath(url.path() + QStringLiteral("/movie/%1/credits").arg(movieId));
 
     QNetworkRequest request(url);

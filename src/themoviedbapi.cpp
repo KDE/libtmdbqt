@@ -50,6 +50,7 @@ TheMovieDbApi::TheMovieDbApi(const QString &apiKey)
 {
     d->m_apiKey = apiKey;
     QUrl url = d->baseUrl();
+    d->m_jobParams.setBaseUrl(url);
     url.setPath(url.path() + QLatin1String("configuration"));
     //qDebug() << url;
     QNetworkRequest request(url);
@@ -64,17 +65,17 @@ TheMovieDbApi::~TheMovieDbApi()
 
 SearchJob *TheMovieDbApi::searchMovie(const QString &movieName, int searchYear, const QString &language)
 {
-    return new SearchJob(d->m_jobParams, d->baseUrl(), movieName, searchYear, language);
+    return new SearchJob(d->m_jobParams, movieName, searchYear, language);
 }
 
 MovieInfoJob *TheMovieDbApi::getMovieInfo(int movieId)
 {
-    return new MovieInfoJob(d->m_jobParams, d->baseUrl(), movieId);
+    return new MovieInfoJob(d->m_jobParams, movieId);
 }
 
 CreditsJob *TheMovieDbApi::getCredits(int movieId)
 {
-    return new CreditsJob(d->m_jobParams, d->baseUrl(), movieId);
+    return new CreditsJob(d->m_jobParams, movieId);
 }
 
 Configuration &TheMovieDbApi::configuration() const

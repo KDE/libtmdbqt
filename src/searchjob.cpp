@@ -40,10 +40,10 @@ public:
     const JobParams &m_params;
 };
 
-SearchJob::SearchJob(const JobParams &params, const QUrl &baseUrl, const QString &movieName, int searchYear, const QString &language)
+SearchJob::SearchJob(const JobParams &params, const QString &movieName, int searchYear, const QString &language)
     : d(new SearchJobPrivate(params))
 {
-    QUrl url = baseUrl;
+    QUrl url = params.baseUrl;
     url.setPath(url.path() + QStringLiteral("search/movie"));
     url.addQueryItem(QStringLiteral("query"), movieName);
     if (searchYear > 0)
