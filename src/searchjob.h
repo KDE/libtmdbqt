@@ -31,6 +31,7 @@ namespace TmdbQt
 {
 class TheMovieDbApi;
 class SearchJobPrivate;
+class JobParams;
 
 class TMDBQT_EXPORT SearchJob : public QObject
 {
@@ -48,7 +49,7 @@ private Q_SLOTS:
 
 private:
     friend class TheMovieDbApi;
-    SearchJob(QNetworkAccessManager *qnam, const QUrl &baseUrl, const QString &movieName,
+    SearchJob(const JobParams &params, const QUrl &baseUrl, const QString &movieName,
               int searchYear, const QString &language);
     ~SearchJob();
 

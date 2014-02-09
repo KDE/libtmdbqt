@@ -17,44 +17,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _TMDBQT_MOVIEDB_H
-#define _TMDBQT_MOVIEDB_H
+#ifndef _TMDBQT_JOBPARAMS_P_H_
+#define _TMDBQT_JOBPARAMS_P_H_
 
 #include "tmdbqt_export.h"
-#include <QString>
-#include <QDate>
-#include <QSharedDataPointer>
-class QJsonObject;
+
+class QNetworkAccessManager;
 
 namespace TmdbQt
 {
-class MovieDbList;
 class Configuration;
-class MovieDbPrivate;
 
-class TMDBQT_EXPORT MovieDb
+class JobParams
 {
 public:
-    MovieDb(const Configuration &configuration);
-    MovieDb(const MovieDb &other);
-    ~MovieDb();
-    MovieDb &operator=(const MovieDb &other);
+    JobParams(QNetworkAccessManager &nam, Configuration &config)
+        : qnam(nam), configuration(config) {}
 
-    QString backdropPath() const;
-    int id() const;
-    QString originalTitle() const;
-    QDate releaseDate() const;
-    QString posterPath() const;
-    QString title() const;
-
-    QUrl backdropUrl(const QString &size) const;
-    QUrl posterUrl(const QString &size) const;
-
-private:
-    friend class MovieDbList;
-    void load(const QJsonObject &json);
-
-    QSharedDataPointer<MovieDbPrivate> d;
+    QNetworkAccessManager &qnam;
+    Configuration &configuration;
 };
 
 } // namespace

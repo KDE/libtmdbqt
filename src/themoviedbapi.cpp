@@ -19,7 +19,8 @@
 
 #include "themoviedbapi.h"
 #include "searchjob.h"
-#include "configuration_p.h"
+#include "configuration.h"
+#include "jobparams_p.h"
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -31,10 +32,13 @@ using namespace TmdbQt;
 class TmdbQt::TheMovieDbApiPrivate
 {
 public:
+    TheMovieDbApiPrivate()
+        : m_jobParams(m_qnam, m_configuration) {}
     QString m_apiKey;
-    QNetworkAccessManager *m_qnam;
+    QNetworkAccessManager m_qnam;
     QNetworkReply *m_configurationReply;
     Configuration m_configuration;
+    JobParams m_jobParams;
 
     QUrl baseUrl() const;
 };
@@ -43,12 +47,11 @@ TheMovieDbApi::TheMovieDbApi(const QString &apiKey)
     : d(new TheMovieDbApiPrivate)
 {
     d->m_apiKey = apiKey;
-    d->m_qnam = new QNetworkAccessManager(this);
     QUrl url = d->baseUrl();
     url.setPath(url.path() + QLatin1String("configuration"));
     //qDebug() << url;
     QNetworkRequest request(url);
-    d->m_configurationReply = d->m_qnam->get(request);
+    d->m_configurationReply = d->m_qnam.get(request);
     connect(d->m_configurationReply, SIGNAL(finished()), this, SLOT(slotConfigurationReady()));
 }
 
@@ -59,10 +62,10 @@ TheMovieDbApi::~TheMovieDbApi()
 
 SearchJob *TheMovieDbApi::searchMovie(const QString &movieName, int searchYear, const QString &language)
 {
-    return new SearchJob(d->m_qnam, d->baseUrl(), movieName, searchYear, language);
+    return new SearchJob(d->m_jobParams, d->baseUrl(), movieName, searchYear, language);
 }
 
-Configuration TheMovieDbApi::configuration() const
+Configuration &TheMovieDbApi::configuration() const
 {
     return d->m_configuration;
 }

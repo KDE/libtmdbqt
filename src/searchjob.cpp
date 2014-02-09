@@ -18,6 +18,8 @@
  */
 
 #include "searchjob.h"
+#include "jobparams_p.h"
+#include "configuration.h"
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QDebug>
@@ -30,13 +32,16 @@ using namespace TmdbQt;
 class TmdbQt::SearchJobPrivate
 {
 public:
+    SearchJobPrivate(const JobParams &params)
+        : m_params(params) {}
     QNetworkReply *m_reply;
     QString m_errorMessage;
     MovieDbList m_result;
+    const JobParams &m_params;
 };
 
-SearchJob::SearchJob(QNetworkAccessManager *qnam, const QUrl &baseUrl, const QString &movieName, int searchYear, const QString &language)
-    : d(new SearchJobPrivate)
+SearchJob::SearchJob(const JobParams &params, const QUrl &baseUrl, const QString &movieName, int searchYear, const QString &language)
+    : d(new SearchJobPrivate(params))
 {
     QUrl url = baseUrl;
     url.setPath(url.path() + QStringLiteral("search/movie"));
@@ -47,7 +52,7 @@ SearchJob::SearchJob(QNetworkAccessManager *qnam, const QUrl &baseUrl, const QSt
         url.addQueryItem(QStringLiteral("language"), language);
 
     QNetworkRequest request(url);
-    d->m_reply = qnam->get(request);
+    d->m_reply = params.qnam.get(request);
     connect(d->m_reply, SIGNAL(finished()), this, SLOT(requestFinished()));
 }
 
@@ -81,7 +86,7 @@ void SearchJob::requestFinished()
     }
     QJsonObject root = doc.object();
     QJsonArray results = root.value(QStringLiteral("results")).toArray();
-    d->m_result.load(results);
+    d->m_result.load(results, d->m_params.configuration);
 
     emit result(this);
     deleteLater();

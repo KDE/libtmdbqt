@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "configuration_p.h"
+#include "configuration.h"
 
 #include <QDebug>
 #include <QJsonObject>

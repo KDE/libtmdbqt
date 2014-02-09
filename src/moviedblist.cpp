@@ -25,10 +25,10 @@
 
 using namespace TmdbQt;
 
-void MovieDbList::load(const QJsonArray &json)
+void MovieDbList::load(const QJsonArray &json, const Configuration &configuration)
 {
   for (int i = 0 ; i < json.count(); ++i) {
-    MovieDb movie;
+    MovieDb movie(configuration);
     movie.load(json.at(i).toObject());
     append(movie);
   }

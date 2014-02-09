@@ -29,6 +29,10 @@ class SearchJob;
 class Configuration;
 class TheMovieDbApiPrivate;
 
+/**
+ * @brief The TheMovieDbApi class provides the main API for accessing
+ * TheMovieDatabase.org (also known as TMDB).
+ */
 class TMDBQT_EXPORT TheMovieDbApi : public QObject
 {
     Q_OBJECT
@@ -40,8 +44,8 @@ public:
                            int searchYear = 0,
                            const QString &language = QString());
 
-    // internal
-    Configuration configuration() const;
+    Configuration &configuration() const;
+
 Q_SIGNALS:
     /**
      * Emitted when the initialization is done. Wait for this signal before calling other methods!

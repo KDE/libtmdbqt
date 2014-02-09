@@ -65,7 +65,7 @@ set(TMDBQT_HEADERS
     ${CMAKE_CURRENT_BINARY_DIR}/tmdbqt_export.h
    themoviedbapi.h
    searchjob.h
-   configuration_p.h
+   configuration.h
    moviedblist.h
    moviedb.h
 )

@@ -55,6 +55,9 @@ void SearchTest::testSearch()
     QCOMPARE(movie.originalTitle(), title);
     QVERIFY(movie.backdropPath().contains(QLatin1String(".jpg")));
     QVERIFY(movie.posterPath().contains(QLatin1String(".jpg")));
+
+    const QString backdrop = movie.backdropUrl(QLatin1String("w92")).toString();
+    QVERIFY2(backdrop.startsWith(QLatin1String("http://image.tmdb.org/t/p/w92/")), qPrintable(backdrop));
 }
 
 QTEST_MAIN(SearchTest)

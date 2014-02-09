@@ -29,6 +29,7 @@ class QJsonArray;
 namespace TmdbQt
 {
 class SearchJob;
+class Configuration;
 
 class TMDBQT_EXPORT MovieDbList : public QList<MovieDb>
 {
@@ -36,7 +37,7 @@ public:
 
 private:
     friend class SearchJob;
-    void load(const QJsonArray &json);
+    void load(const QJsonArray &json, const Configuration &configuration);
 };
 
 } // namespace
