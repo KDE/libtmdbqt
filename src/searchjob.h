@@ -42,7 +42,7 @@ public:
     MovieDbList result() const;
 
 Q_SIGNALS:
-    void result(SearchJob *job);
+    void result(TmdbQt::SearchJob *job);
 
 private Q_SLOTS:
     void requestFinished();

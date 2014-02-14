@@ -45,7 +45,7 @@ public:
     PersonList crew() const;
 
 Q_SIGNALS:
-    void result(CreditsJob *job);
+    void result(TmdbQt::CreditsJob *job);
 
 private Q_SLOTS:
     void requestFinished();
