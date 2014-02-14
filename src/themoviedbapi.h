@@ -42,6 +42,8 @@ public:
     TheMovieDbApi(const QString &apiKey);
     ~TheMovieDbApi();
 
+    bool isInitialized() const;
+
     SearchJob *searchMovie(const QString &movieName,
                            int searchYear = 0,
                            const QString &language = QString());

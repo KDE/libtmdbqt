@@ -129,6 +129,8 @@ int MovieDb::runtime() const
 QUrl MovieDb::backdropUrl(const QString &size) const
 {
     QUrl url = d->m_configuration.imageBaseUrl();
+    if (url.isEmpty())
+        qWarning() << "No image base URL, did you wait for the initialized() signal before starting jobs?";
     url.setPath(url.path() + size + d->m_backdropPath);
     return url;
 }
@@ -136,6 +138,8 @@ QUrl MovieDb::backdropUrl(const QString &size) const
 QUrl MovieDb::posterUrl(const QString &size) const
 {
     QUrl url = d->m_configuration.imageBaseUrl();
+    if (url.isEmpty())
+        qWarning() << "No image base URL, did you wait for the initialized() signal before starting jobs?";
     url.setPath(url.path() + size + d->m_posterPath);
     return url;
 }

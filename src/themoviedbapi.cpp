@@ -63,6 +63,11 @@ TheMovieDbApi::~TheMovieDbApi()
     delete d;
 }
 
+bool TheMovieDbApi::isInitialized() const
+{
+    return d->m_configurationReply == 0;
+}
+
 SearchJob *TheMovieDbApi::searchMovie(const QString &movieName, int searchYear, const QString &language)
 {
     return new SearchJob(d->m_jobParams, movieName, searchYear, language);

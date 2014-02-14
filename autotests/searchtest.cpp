@@ -52,8 +52,10 @@ static const char s_key[] = "6c125ca74f059b4c88bc49e1b09e241e"; // themoviedb.or
 SearchTest::SearchTest()
     : m_api(QString::fromLatin1(s_key))
 {
+    QVERIFY(!m_api.isInitialized());
     QSignalSpy initSpy(&m_api, SIGNAL(initialized()));
     QVERIFY(initSpy.wait());
+    QVERIFY(m_api.isInitialized());
 }
 
 void SearchTest::testSearch()
