@@ -19,6 +19,7 @@
 
 #include "themoviedbapi.h"
 #include "searchjob.h"
+#include "tvsearchjob.h"
 #include "creditsjob.h"
 #include "movieinfojob.h"
 #include "configuration.h"
@@ -71,6 +72,11 @@ bool TheMovieDbApi::isInitialized() const
 SearchJob *TheMovieDbApi::searchMovie(const QString &movieName, int searchYear, const QString &language)
 {
     return new SearchJob(d->m_jobParams, movieName, searchYear, language);
+}
+
+TvSearchJob* TheMovieDbApi::searchTvShow(const QString& tvShowName, int firstAiredYear, const QString& language)
+{
+    return new TvSearchJob(d->m_jobParams, tvShowName, firstAiredYear, language);
 }
 
 MovieInfoJob *TheMovieDbApi::getMovieInfo(int movieId)

@@ -24,6 +24,7 @@
 #include <QSignalSpy>
 #include <themoviedbapi.h>
 #include <searchjob.h>
+#include <tvsearchjob.h>
 #include <creditsjob.h>
 #include <movieinfojob.h>
 #include <QDebug>
@@ -39,6 +40,7 @@ public:
 
 private slots:
     void testSearch();
+    void testTvSearch();
     void testMovieInfo();
     void testMovieInfoFightClub();
     void testCredits();
@@ -79,6 +81,29 @@ void SearchTest::testSearch()
     const QString backdrop = movie.backdropUrl(QLatin1String("w92")).toString();
     QVERIFY2(backdrop.startsWith(QLatin1String("http://image.tmdb.org/t/p/w92/")), qPrintable(backdrop));
     const QString poster = movie.posterUrl(QLatin1String("w92")).toString();
+    QVERIFY2(poster.startsWith(QLatin1String("http://image.tmdb.org/t/p/w92/")), qPrintable(poster));
+}
+
+void SearchTest::testTvSearch()
+{
+    const QString name = QString::fromLatin1("Breaking Bad");
+    TvSearchJob *job = m_api.searchTvShow(name);
+    QSignalSpy spy(job, SIGNAL(result(TmdbQt::TvSearchJob*)));
+    QVERIFY(spy.wait());
+    QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
+    TvDbList tvshows = job->result();
+    QCOMPARE(tvshows.count(), 1);
+    TvDb tvshow = tvshows.first();
+    QCOMPARE(tvshow.id(), 1396);
+    QCOMPARE(tvshow.firstAiredDate(), QDate(2008, 1, 19));
+    QCOMPARE(tvshow.name(), name);
+    QCOMPARE(tvshow.originalName(), name);
+    QVERIFY(tvshow.backdropPath().contains(QLatin1String(".jpg")));
+    QVERIFY(tvshow.posterPath().contains(QLatin1String(".jpg")));
+
+    const QString backdrop = tvshow.backdropUrl(QLatin1String("w92")).toString();
+    QVERIFY2(backdrop.startsWith(QLatin1String("http://image.tmdb.org/t/p/w92/")), qPrintable(backdrop));
+    const QString poster = tvshow.posterUrl(QLatin1String("w92")).toString();
     QVERIFY2(poster.startsWith(QLatin1String("http://image.tmdb.org/t/p/w92/")), qPrintable(poster));
 }
 

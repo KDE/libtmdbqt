@@ -26,6 +26,7 @@
 namespace TmdbQt
 {
 class SearchJob;
+class TvSearchJob;
 class CreditsJob;
 class MovieInfoJob;
 class Configuration;
@@ -47,6 +48,10 @@ public:
     SearchJob *searchMovie(const QString &movieName,
                            int searchYear = 0,
                            const QString &language = QString());
+
+    TvSearchJob *searchTvShow(const QString &tvShowName,
+                              int firstAiredYear = 0,
+                              const QString &language = QString());
 
     MovieInfoJob *getMovieInfo(int movieId);
     CreditsJob *getCredits(int movieId);

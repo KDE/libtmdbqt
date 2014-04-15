@@ -26,6 +26,9 @@ set(tmdbqt_SRCS
    configuration.cpp
    moviedblist.cpp
    moviedb.cpp
+   tvdblist.cpp
+   tvdb.cpp
+   tvsearchjob.cpp
    personlist.cpp
    person.cpp
 )
@@ -69,11 +72,14 @@ set(TMDBQT_HEADERS
     ${CMAKE_CURRENT_BINARY_DIR}/tmdbqt_export.h
    themoviedbapi.h
    searchjob.h
+   tvsearchjob.h
    creditsjob.h
    movieinfojob.h
    configuration.h
    moviedblist.h
    moviedb.h
+   tvdblist.h
+   tvdb.h
    personlist.h
    person.h
 )
