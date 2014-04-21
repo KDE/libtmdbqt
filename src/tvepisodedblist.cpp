@@ -17,26 +17,18 @@
  *
  */
 
-#ifndef TMDBQT_TVDBLIST_H
-#define TMDBQT_TVDBLIST_H
+#include "tvepisodedblist.h"
 
-#include "tvshowdb.h"
-#include <QList>
+#include <QJsonArray>
+#include <QJsonObject>
 
-class QJsonArray;
+using namespace TmdbQt;
 
-namespace TmdbQt
+void TvEpisodeDbList::load(const QJsonArray &json, const Configuration &configuration)
 {
-class TvSearchJob;
-class Configuration;
-
-class TMDBQT_EXPORT TvShowDbList : public QList<TvShowDb>
-{
-private:
-    friend class TvSearchJob;
-    void load(const QJsonArray &json, const Configuration &configuration);
-};
-
+  for (int i = 0 ; i < json.count(); ++i) {
+    TvEpisodeDb episode(configuration);
+    episode.load(json.at(i).toObject());
+    append(episode);
+  }
 }
-
-#endif // TMDBQT_TVDBLIST_H

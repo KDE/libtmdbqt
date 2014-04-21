@@ -17,26 +17,25 @@
  *
  */
 
-#ifndef TMDBQT_TVDBLIST_H
-#define TMDBQT_TVDBLIST_H
+#ifndef TMDBQT_TVEPISODEDBLIST_H
+#define TMDBQT_TVEPISODEDBLIST_H
 
-#include "tvshowdb.h"
+#include "tmdbqt_export.h"
+#include "tvepisodedb.h"
 #include <QList>
 
 class QJsonArray;
 
 namespace TmdbQt
 {
-class TvSearchJob;
-class Configuration;
+class TvSeasonDb;
 
-class TMDBQT_EXPORT TvShowDbList : public QList<TvShowDb>
+class TMDBQT_EXPORT TvEpisodeDbList : public QList<TvEpisodeDb>
 {
 private:
-    friend class TvSearchJob;
+    friend class TvSeasonDb;
     void load(const QJsonArray &json, const Configuration &configuration);
 };
-
 }
 
-#endif // TMDBQT_TVDBLIST_H
+#endif // TMDBQT_TVEPISODEDBLIST_H

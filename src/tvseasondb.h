@@ -30,6 +30,8 @@ namespace TmdbQt
 {
 class TvSeasonDbPrivate;
 class TvSeasonDbList;
+class TvSeasonInfoJob;
+class TvEpisodeDbList;
 class Configuration;
 
 class TMDBQT_EXPORT TvSeasonDb
@@ -51,8 +53,11 @@ public:
     // More details required
     QString name() const;
     QString overview();
+    TvEpisodeDbList episodes() const;
+
 private:
     friend class TvSeasonDbList;
+    friend class TvSeasonInfoJob;
     void load(const QJsonObject &json);
 
     QSharedDataPointer<TvSeasonDbPrivate> d;

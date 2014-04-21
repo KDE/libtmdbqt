@@ -17,26 +17,47 @@
  *
  */
 
-#ifndef TMDBQT_TVDBLIST_H
-#define TMDBQT_TVDBLIST_H
+#ifndef TMDBQT_TVEPISODE_H
+#define TMDBQT_TVEPISODE_H
 
-#include "tvshowdb.h"
-#include <QList>
+#include "tmdbqt_export.h"
+#include <QString>
+#include <QDate>
+#include <QSharedDataPointer>
+#include <QStringList>
 
-class QJsonArray;
+class QJsonObject;
 
 namespace TmdbQt
 {
-class TvSearchJob;
+class TvEpisodeDbList;
 class Configuration;
+class TvEpisodeDbPrivate;
+class TvEpisodeInfoJob;
 
-class TMDBQT_EXPORT TvShowDbList : public QList<TvShowDb>
+class TMDBQT_EXPORT TvEpisodeDb
 {
-private:
-    friend class TvSearchJob;
-    void load(const QJsonArray &json, const Configuration &configuration);
-};
+public:
+    TvEpisodeDb(const Configuration &config);
+    TvEpisodeDb(const TvEpisodeDb &other);
+    ~TvEpisodeDb();
 
+    TvEpisodeDb &operator=(const TvEpisodeDb &other);
+
+    int episodeNumber() const;
+    QDate airDate() const;
+
+    QString name() const;
+    QString overview() const;
+    QString stillPath() const;
+    QUrl stillUrl(const QString &size) const;
+
+private:
+    friend class TvEpisodeDbList;
+    void load(const QJsonObject &json);
+
+    QSharedDataPointer<TvEpisodeDbPrivate> d;
+};
 }
 
-#endif // TMDBQT_TVDBLIST_H
+#endif // TMDBQT_TVEPISODE_H

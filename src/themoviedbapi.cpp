@@ -23,6 +23,7 @@
 #include "creditsjob.h"
 #include "movieinfojob.h"
 #include "tvshowinfojob.h"
+#include "tvseasoninfojob.h"
 #include "configuration.h"
 #include "jobparams_p.h"
 #include <QNetworkAccessManager>
@@ -88,6 +89,11 @@ MovieInfoJob *TheMovieDbApi::getMovieInfo(int movieId)
 TvShowInfoJob* TheMovieDbApi::getTvShowInfo(int tvshowId)
 {
     return new TvShowInfoJob(d->m_jobParams, tvshowId);
+}
+
+TvSeasonInfoJob* TheMovieDbApi::getTvSeasonInfo(int tvshowId, int seasonNum)
+{
+    return new TvSeasonInfoJob(d->m_jobParams, tvshowId, seasonNum);
 }
 
 CreditsJob *TheMovieDbApi::getCredits(int movieId)

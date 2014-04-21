@@ -1,4 +1,5 @@
 /*
+ * <one line to give the library's name and an idea of what it does.>
  * Copyright (C) 2014  Vishesh Handa <me@vhanda.in>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,26 +18,44 @@
  *
  */
 
-#ifndef TMDBQT_TVDBLIST_H
-#define TMDBQT_TVDBLIST_H
+#ifndef TMDBQT_TVSEASONINFOJOB_H
+#define TMDBQT_TVSEASONINFOJOB_H
 
-#include "tvshowdb.h"
-#include <QList>
+#include <QObject>
+#include "tvseasondb.h"
 
-class QJsonArray;
+class QNetworkAccessManager;
+class QUrl;
 
 namespace TmdbQt
 {
-class TvSearchJob;
-class Configuration;
 
-class TMDBQT_EXPORT TvShowDbList : public QList<TvShowDb>
+class TheMovieDbApi;
+class TvSeasonInfoJobPrivate;
+class JobParams;
+
+class TvSeasonInfoJob : public QObject
 {
+    Q_OBJECT
+public:
+    bool hasError() const;
+    QString errorMessage() const;
+    TvSeasonDb result() const;
+
+Q_SIGNALS:
+    void result(TmdbQt::TvSeasonInfoJob *job);
+
+private Q_SLOTS:
+    void requestFinished();
+
 private:
-    friend class TvSearchJob;
-    void load(const QJsonArray &json, const Configuration &configuration);
+    friend class TheMovieDbApi;
+    TvSeasonInfoJob(const JobParams &params, int tvid, int seasonNum);
+    ~TvSeasonInfoJob();
+
+    TvSeasonInfoJobPrivate *d;
 };
 
 }
 
-#endif // TMDBQT_TVDBLIST_H
+#endif // TMDBQT_TVSEASONINFOJOB_H

@@ -18,6 +18,7 @@
  */
 
 #include "tvseasondb.h"
+#include "tvepisodedblist.h"
 #include "configuration.h"
 
 #include <QJsonArray>
@@ -45,6 +46,8 @@ public:
 
     QDate m_airDate;
     QString m_posterPath;
+
+    TvEpisodeDbList m_episodes;
 };
 
 TvSeasonDb::TvSeasonDb(const Configuration& config)
@@ -106,6 +109,11 @@ QUrl TvSeasonDb::posterUrl(const QString& size) const
     return url;
 }
 
+TvEpisodeDbList TvSeasonDb::episodes() const
+{
+    return d->m_episodes;
+}
+
 void TvSeasonDb::load(const QJsonObject& json)
 {
     d->m_id = json.value(QStringLiteral("id")).toInt();
@@ -116,6 +124,9 @@ void TvSeasonDb::load(const QJsonObject& json)
     const QString airDate = json.value(QStringLiteral("air_date")).toString();
     d->m_airDate = QDate::fromString(airDate, Qt::ISODate);
     d->m_posterPath = json.value(QStringLiteral("poster_path")).toString();
+
+    QJsonArray arr = json.value(QStringLiteral("episodes")).toArray();
+    d->m_episodes.load(arr, d->m_configuration);
 }
 
 

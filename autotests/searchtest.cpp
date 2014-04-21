@@ -29,6 +29,8 @@
 #include <creditsjob.h>
 #include <movieinfojob.h>
 #include <tvseasondblist.h>
+#include <tvseasoninfojob.h>
+#include <tvepisodedblist.h>
 #include <QDebug>
 
 using namespace TmdbQt;
@@ -46,6 +48,7 @@ private slots:
     void testMovieInfo();
     void testMovieInfoFightClub();
     void testTvShowInfo();
+    void testTvSeasonInfo();
     void testCredits();
 
 private:
@@ -172,6 +175,28 @@ void SearchTest::testTvShowInfo()
     QVERIFY(!seasons[3].posterPath().isEmpty());
     QVERIFY(!seasons[4].posterPath().isEmpty());
     QVERIFY(!seasons[5].posterPath().isEmpty());
+}
+
+void SearchTest::testTvSeasonInfo()
+{
+    TvSeasonInfoJob *job = m_api.getTvSeasonInfo(1396, 1);
+    QSignalSpy spy(job, SIGNAL(result(TmdbQt::TvSeasonInfoJob*)));
+    QVERIFY(spy.wait());
+    QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
+
+    TvSeasonDb season = job->result();
+    QCOMPARE(season.id(), 3572);
+    QCOMPARE(season.overview(), QStringLiteral("The first season of the American television drama series Breaking Bad premiered on January 20, 2008 and concluded on March 9, 2008. It consisted of seven episodes, each running approximately 47 minutes in length, except the pilot episode which runs approximately 57 minutes. AMC broadcast the first season on Sundays at 10:00 pm in the United States. Season one was to consist of nine episodes, which was reduced to seven by the writer's strike. The complete first season was released on Region 1 DVD on February 24, 2009 and Region A Blu-ray on March 16, 2010."));
+    QCOMPARE(season.name(), QStringLiteral("Season 1"));
+
+    TvEpisodeDbList episodes = season.episodes();
+    QCOMPARE(episodes.size(), 7);
+
+    QCOMPARE(episodes[0].airDate(), QDate(2008, 1, 19));
+    QCOMPARE(episodes[0].episodeNumber(), 1);
+    QCOMPARE(episodes[0].name(), QStringLiteral("Pilot"));
+    QCOMPARE(episodes[0].overview(), QStringLiteral("When an unassuming high school chemistry teacher discovers he has a rare form of lung cancer, he decides to team up with a former student and create a top of the line crystal meth in a used RV, to provide for his family once he is gone."));
+    QVERIFY(!episodes[0].stillPath().isEmpty());
 }
 
 void SearchTest::testCredits()

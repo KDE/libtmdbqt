@@ -31,7 +31,10 @@ set(tmdbqt_SRCS
    tvseasondblist.cpp
    tvseasondb.cpp
    tvsearchjob.cpp
+   tvepisodedb.cpp
+   tvepisodedblist.cpp
    tvshowinfojob.cpp
+   tvseasoninfojob.cpp
    personlist.cpp
    person.cpp
 )
@@ -86,6 +89,9 @@ set(TMDBQT_HEADERS
    tvseasondblist.h
    tvseasondb.h
    tvshowinfojob.h
+   tvseasoninfojob.h
+   tvepisodedb.h
+   tvepisodedblist.h
    personlist.h
    person.h
 )

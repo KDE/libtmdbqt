@@ -30,6 +30,7 @@ class TvSearchJob;
 class CreditsJob;
 class MovieInfoJob;
 class TvShowInfoJob;
+class TvSeasonInfoJob;
 class Configuration;
 class TheMovieDbApiPrivate;
 
@@ -56,6 +57,7 @@ public:
 
     MovieInfoJob *getMovieInfo(int movieId);
     TvShowInfoJob *getTvShowInfo(int tvshowId);
+    TvSeasonInfoJob *getTvSeasonInfo(int tvshowId, int seasonNum);
     CreditsJob *getCredits(int movieId);
 
     Configuration &configuration() const;
