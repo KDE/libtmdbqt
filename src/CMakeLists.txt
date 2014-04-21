@@ -28,7 +28,10 @@ set(tmdbqt_SRCS
    moviedb.cpp
    tvshowdblist.cpp
    tvshowdb.cpp
+   tvseasondblist.cpp
+   tvseasondb.cpp
    tvsearchjob.cpp
+   tvshowinfojob.cpp
    personlist.cpp
    person.cpp
 )
@@ -80,6 +83,9 @@ set(TMDBQT_HEADERS
    moviedb.h
    tvshowdblist.h
    tvshowdb.h
+   tvseasondblist.h
+   tvseasondb.h
+   tvshowinfojob.h
    personlist.h
    person.h
 )

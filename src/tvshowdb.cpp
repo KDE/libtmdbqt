@@ -20,6 +20,7 @@
 
 #include "tvshowdb.h"
 #include "configuration.h"
+#include "tvseasondblist.h"
 
 #include <QJsonArray>
 #include <QJsonObject>
@@ -44,6 +45,9 @@ public:
     QDate m_firstAired;
     QString m_posterPath;
     QString m_backdropPath;
+
+    QString m_overview;
+    TvSeasonDbList m_seasons;
 };
 
 
@@ -116,15 +120,29 @@ QUrl TvShowDb::posterUrl(const QString &size) const
 
 }
 
+QString TvShowDb::overview() const
+{
+    return d->m_overview;
+}
+
+TvSeasonDbList TvShowDb::seasons() const
+{
+    return d->m_seasons;
+}
+
 void TvShowDb::load(const QJsonObject& json)
 {
     d->m_backdropPath = json.value(QStringLiteral("backdrop_path")).toString();
     d->m_id = json.value(QStringLiteral("id")).toInt();
     d->m_originalName = json.value(QStringLiteral("original_name")).toString();
     d->m_name = json.value(QStringLiteral("name")).toString();
+    d->m_overview = json.value(QStringLiteral("overview")).toString();
 
     const QString firstAiredDate = json.value(QStringLiteral("first_air_date")).toString();
     d->m_firstAired = QDate::fromString(firstAiredDate, Qt::ISODate);
     d->m_posterPath = json.value(QStringLiteral("poster_path")).toString();
+
+    QJsonArray arr = json.value(QStringLiteral("seasons")).toArray();
+    d->m_seasons.load(arr, d->m_configuration);
 }
 

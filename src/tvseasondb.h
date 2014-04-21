@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  Vishesh Handa <me@vhanda.in>
+ * Copyright (C) 2014 Vishesh Handa <me@vhanda.in>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,53 +17,47 @@
  *
  */
 
-#ifndef TMDBQT_TVDB_H
-#define TMDBQT_TVDB_H
+#ifndef TMDBQT_TVSEASON_H
+#define TMDBQT_TVSEASON_H
 
 #include "tmdbqt_export.h"
 #include <QString>
 #include <QDate>
 #include <QSharedDataPointer>
+#include <QJsonObject>
 
 namespace TmdbQt
 {
-class TvShowDbList;
+class TvSeasonDbPrivate;
 class TvSeasonDbList;
-class TvShowInfoJob;
-class TvDbPrivate;
 class Configuration;
 
-class TMDBQT_EXPORT TvShowDb
+class TMDBQT_EXPORT TvSeasonDb
 {
 public:
-    TvShowDb(const Configuration &config);
-    TvShowDb(const TvShowDb &other);
-    ~TvShowDb();
-    TvShowDb &operator =(const TvShowDb &other);
+    TvSeasonDb(const Configuration &config);
+    TvSeasonDb(const TvSeasonDb &other);
+    ~TvSeasonDb();
+
+    TvSeasonDb &operator=(const TvSeasonDb &other);
 
     int id() const;
-    QString name() const;
-    QString originalName() const;
-
-    QDate firstAiredDate() const;
+    int seasonNumber() const;
+    QDate airDate() const;
 
     QString posterPath() const;
-    QString backdropPath() const;
-
     QUrl posterUrl(const QString &size) const;
-    QUrl backdropUrl(const QString &size) const;
 
-    // More details required (required TvShowInfoJob)
-    QString overview() const;
-    TvSeasonDbList seasons() const;
-
+    // More details required
+    QString name() const;
+    QString overview();
 private:
-    friend class TvShowDbList;
-    friend class TvShowInfoJob;
+    friend class TvSeasonDbList;
     void load(const QJsonObject &json);
 
-    QSharedDataPointer<TvDbPrivate> d;
+    QSharedDataPointer<TvSeasonDbPrivate> d;
 };
+
 }
 
-#endif // TMDBQT_TVDB_H
+#endif // TMDBQT_TVSEASON_H

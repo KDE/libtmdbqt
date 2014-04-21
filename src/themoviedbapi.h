@@ -29,6 +29,7 @@ class SearchJob;
 class TvSearchJob;
 class CreditsJob;
 class MovieInfoJob;
+class TvShowInfoJob;
 class Configuration;
 class TheMovieDbApiPrivate;
 
@@ -54,6 +55,7 @@ public:
                               const QString &language = QString());
 
     MovieInfoJob *getMovieInfo(int movieId);
+    TvShowInfoJob *getTvShowInfo(int tvshowId);
     CreditsJob *getCredits(int movieId);
 
     Configuration &configuration() const;

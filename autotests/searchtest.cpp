@@ -25,8 +25,10 @@
 #include <themoviedbapi.h>
 #include <searchjob.h>
 #include <tvsearchjob.h>
+#include <tvshowinfojob.h>
 #include <creditsjob.h>
 #include <movieinfojob.h>
+#include <tvseasondblist.h>
 #include <QDebug>
 
 using namespace TmdbQt;
@@ -43,6 +45,7 @@ private slots:
     void testTvSearch();
     void testMovieInfo();
     void testMovieInfoFightClub();
+    void testTvShowInfo();
     void testCredits();
 
 private:
@@ -134,6 +137,41 @@ void SearchTest::testMovieInfoFightClub()
     QCOMPARE(movie.budget(), 63000000);
     QCOMPARE(movie.revenue(), 100853753);
     QCOMPARE(movie.runtime(), 139);
+}
+
+void SearchTest::testTvShowInfo()
+{
+    TvShowInfoJob *job = m_api.getTvShowInfo(1396);
+    QSignalSpy spy(job, SIGNAL(result(TmdbQt::TvShowInfoJob*)));
+    QVERIFY(spy.wait());
+    QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
+
+    TvShowDb tvshow = job->result();
+    QCOMPARE(tvshow.overview(), QStringLiteral("Breaking Bad is an American crime drama television series created and produced by Vince Gilligan. Set and produced in Albuquerque, New Mexico, Breaking Bad is the story of Walter White, a struggling high school chemistry teacher who is diagnosed with inoperable lung cancer at the beginning of the series. He turns to a life of crime, producing and selling methamphetamine, in order to secure his family's financial future before he dies, teaming with his former student, Jesse Pinkman. Heavily serialized, the series is known for positioning its characters in seemingly inextricable corners and has been labeled a contemporary western by its creator."));
+
+    TvSeasonDbList seasons = tvshow.seasons();
+    QCOMPARE(seasons.size(), 6);
+
+    QCOMPARE(seasons[0].seasonNumber(), 0);
+    QCOMPARE(seasons[1].seasonNumber(), 1);
+    QCOMPARE(seasons[2].seasonNumber(), 2);
+    QCOMPARE(seasons[3].seasonNumber(), 3);
+    QCOMPARE(seasons[4].seasonNumber(), 4);
+    QCOMPARE(seasons[5].seasonNumber(), 5);
+
+    QCOMPARE(seasons[0].airDate(), QDate(2009, 2, 17));
+    QCOMPARE(seasons[1].airDate(), QDate(2008, 1, 19));
+    QCOMPARE(seasons[2].airDate(), QDate(2009, 3, 8));
+    QCOMPARE(seasons[3].airDate(), QDate(2010, 3, 21));
+    QCOMPARE(seasons[4].airDate(), QDate(2011, 7, 17));
+    QCOMPARE(seasons[5].airDate(), QDate(2012, 7, 15));
+
+    QVERIFY(!seasons[0].posterPath().isEmpty());
+    QVERIFY(!seasons[1].posterPath().isEmpty());
+    QVERIFY(!seasons[2].posterPath().isEmpty());
+    QVERIFY(!seasons[3].posterPath().isEmpty());
+    QVERIFY(!seasons[4].posterPath().isEmpty());
+    QVERIFY(!seasons[5].posterPath().isEmpty());
 }
 
 void SearchTest::testCredits()
