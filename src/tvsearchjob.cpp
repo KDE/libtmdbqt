@@ -37,7 +37,7 @@ public:
         : m_params(params) {}
     QNetworkReply *m_reply;
     QString m_errorMessage;
-    TvDbList m_result;
+    TvShowDbList m_result;
     const JobParams &m_params;
 };
 
@@ -72,7 +72,7 @@ QString TvSearchJob::errorMessage() const
     return d->m_errorMessage;
 }
 
-TvDbList TvSearchJob::result() const
+TvShowDbList TvSearchJob::result() const
 {
     return d->m_result;
 }

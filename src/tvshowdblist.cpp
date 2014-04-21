@@ -17,45 +17,19 @@
  *
  */
 
-#ifndef TMDBQT_TVDB_H
-#define TMDBQT_TVDB_H
+#include "tvshowdblist.h"
+#include "configuration.h"
 
-#include "tmdbqt_export.h"
-#include <QString>
-#include <QDate>
-#include <QSharedDataPointer>
+#include <QJsonArray>
+#include <QJsonObject>
 
-namespace TmdbQt
+using namespace TmdbQt;
+
+void TvShowDbList::load(const QJsonArray &json, const Configuration &configuration)
 {
-class TvDbList;
-class TvDbPrivate;
-class Configuration;
-
-class TMDBQT_EXPORT TvDb
-{
-public:
-    TvDb(const Configuration &config);
-    TvDb(const TvDb &other);
-    ~TvDb();
-    TvDb &operator =(const TvDb &other);
-
-    int id() const;
-    QString name() const;
-    QString originalName() const;
-
-    QDate firstAiredDate() const;
-
-    QString posterPath() const;
-    QString backdropPath() const;
-
-    QUrl posterUrl(const QString &size) const;
-    QUrl backdropUrl(const QString &size) const;
-private:
-    friend class TvDbList;
-    void load(const QJsonObject &json);
-
-    QSharedDataPointer<TvDbPrivate> d;
-};
+  for (int i = 0 ; i < json.count(); ++i) {
+    TvShowDb tv(configuration);
+    tv.load(json.at(i).toObject());
+    append(tv);
+  }
 }
-
-#endif // TMDBQT_TVDB_H

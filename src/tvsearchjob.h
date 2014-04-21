@@ -20,7 +20,7 @@
 #ifndef TMDBQT_TVSEARCHJOB_H
 #define TMDBQT_TVSEARCHJOB_H
 
-#include "tvdblist.h"
+#include "tvshowdblist.h"
 #include <QObject>
 
 class QNetworkAccessManager;
@@ -38,7 +38,7 @@ class TvSearchJob : public QObject
 public:
     bool hasError() const;
     QString errorMessage() const;
-    TvDbList result() const;
+    TvShowDbList result() const;
 
 Q_SIGNALS:
     void result(TmdbQt::TvSearchJob *job);

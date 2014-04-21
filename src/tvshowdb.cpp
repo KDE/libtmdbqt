@@ -18,7 +18,7 @@
  *
  */
 
-#include "tvdb.h"
+#include "tvshowdb.h"
 #include "configuration.h"
 
 #include <QJsonArray>
@@ -47,57 +47,57 @@ public:
 };
 
 
-TvDb::TvDb(const Configuration& config)
+TvShowDb::TvShowDb(const Configuration& config)
     : d(new TvDbPrivate(config))
 {
 }
 
-TvDb::TvDb(const TvDb &other)
+TvShowDb::TvShowDb(const TvShowDb &other)
     : d(other.d)
 {
 }
 
-TvDb::~TvDb()
+TvShowDb::~TvShowDb()
 {
 }
 
-TvDb &TvDb::operator=(const TvDb &other)
+TvShowDb &TvShowDb::operator=(const TvShowDb &other)
 {
     d = other.d;
     return *this;
 }
 
-int TvDb::id() const
+int TvShowDb::id() const
 {
     return d->m_id;
 }
 
-QString TvDb::name() const
+QString TvShowDb::name() const
 {
     return d->m_name;
 }
 
-QString TvDb::originalName() const
+QString TvShowDb::originalName() const
 {
     return d->m_originalName;
 }
 
-QDate TvDb::firstAiredDate() const
+QDate TvShowDb::firstAiredDate() const
 {
     return d->m_firstAired;
 }
 
-QString TvDb::backdropPath() const
+QString TvShowDb::backdropPath() const
 {
     return d->m_backdropPath;
 }
 
-QString TvDb::posterPath() const
+QString TvShowDb::posterPath() const
 {
     return d->m_posterPath;
 }
 
-QUrl TvDb::backdropUrl(const QString &size) const
+QUrl TvShowDb::backdropUrl(const QString &size) const
 {
     QUrl url = d->m_configuration.imageBaseUrl();
     if (url.isEmpty())
@@ -106,7 +106,7 @@ QUrl TvDb::backdropUrl(const QString &size) const
     return url;
 }
 
-QUrl TvDb::posterUrl(const QString &size) const
+QUrl TvShowDb::posterUrl(const QString &size) const
 {
     QUrl url = d->m_configuration.imageBaseUrl();
     if (url.isEmpty())
@@ -116,7 +116,7 @@ QUrl TvDb::posterUrl(const QString &size) const
 
 }
 
-void TvDb::load(const QJsonObject& json)
+void TvShowDb::load(const QJsonObject& json)
 {
     d->m_backdropPath = json.value(QStringLiteral("backdrop_path")).toString();
     d->m_id = json.value(QStringLiteral("id")).toInt();

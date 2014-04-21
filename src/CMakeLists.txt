@@ -26,8 +26,8 @@ set(tmdbqt_SRCS
    configuration.cpp
    moviedblist.cpp
    moviedb.cpp
-   tvdblist.cpp
-   tvdb.cpp
+   tvshowdblist.cpp
+   tvshowdb.cpp
    tvsearchjob.cpp
    personlist.cpp
    person.cpp
@@ -78,8 +78,8 @@ set(TMDBQT_HEADERS
    configuration.h
    moviedblist.h
    moviedb.h
-   tvdblist.h
-   tvdb.h
+   tvshowdblist.h
+   tvshowdb.h
    personlist.h
    person.h
 )

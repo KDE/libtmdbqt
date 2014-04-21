@@ -17,19 +17,28 @@
  *
  */
 
-#include "tvdblist.h"
-#include "configuration.h"
+#ifndef TMDBQT_TVDBLIST_H
+#define TMDBQT_TVDBLIST_H
 
-#include <QJsonArray>
-#include <QJsonObject>
+#include "tvshowdb.h"
+#include <QList>
 
-using namespace TmdbQt;
+class QJsonArray;
 
-void TvDbList::load(const QJsonArray &json, const Configuration &configuration)
+namespace TmdbQt
 {
-  for (int i = 0 ; i < json.count(); ++i) {
-    TvDb tv(configuration);
-    tv.load(json.at(i).toObject());
-    append(tv);
-  }
+class TvSearchJob;
+class Configuration;
+
+class TMDBQT_EXPORT TvShowDbList : public QList<TvShowDb>
+{
+public:
+
+private:
+    friend class TvSearchJob;
+    void load(const QJsonArray &json, const Configuration &configuration);
+};
+
 }
+
+#endif // TMDBQT_TVDBLIST_H
