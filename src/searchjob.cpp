@@ -58,6 +58,7 @@ SearchJob::SearchJob(const JobParams &params, const QString &movieName, int sear
 
 SearchJob::~SearchJob()
 {
+    delete d->m_reply;
     delete d;
 }
 
@@ -87,6 +88,9 @@ void SearchJob::requestFinished()
     QJsonObject root = doc.object();
     QJsonArray results = root.value(QStringLiteral("results")).toArray();
     d->m_result.load(results, d->m_params.configuration);
+
+    d->m_reply->deleteLater();
+    d->m_reply = 0;
 
     emit result(this);
     deleteLater();

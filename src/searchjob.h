@@ -40,6 +40,7 @@ public:
     bool hasError() const;
     QString errorMessage() const;
     MovieDbList result() const;
+    ~SearchJob();
 
 Q_SIGNALS:
     void result(TmdbQt::SearchJob *job);
@@ -51,7 +52,6 @@ private:
     friend class TheMovieDbApi;
     SearchJob(const JobParams &params, const QString &movieName,
               int searchYear, const QString &language);
-    ~SearchJob();
 
     SearchJobPrivate *d;
 };

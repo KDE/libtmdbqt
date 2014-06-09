@@ -53,6 +53,7 @@ MovieInfoJob::MovieInfoJob(const JobParams &params, int movieId)
 
 MovieInfoJob::~MovieInfoJob()
 {
+    delete d->m_reply;
     delete d;
 }
 
@@ -81,6 +82,9 @@ void MovieInfoJob::requestFinished()
     }
     QJsonObject root = doc.object();
     d->m_result.load(root);
+
+    d->m_reply->deleteLater();
+    d->m_reply = 0;
 
     emit result(this);
     deleteLater();

@@ -55,6 +55,7 @@ CreditsJob::CreditsJob(const JobParams &params, int movieId)
 
 CreditsJob::~CreditsJob()
 {
+    delete d->m_reply;
     delete d;
 }
 
@@ -93,6 +94,9 @@ void CreditsJob::requestFinished()
 
     QJsonArray crewArray = root.value(QStringLiteral("crew")).toArray();
     d->m_crew.load(crewArray, d->m_params.configuration, Person::Crew);
+
+    d->m_reply->deleteLater();
+    d->m_reply = 0;
 
     emit result(this);
     deleteLater();

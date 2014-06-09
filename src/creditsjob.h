@@ -43,6 +43,7 @@ public:
 
     PersonList cast() const;
     PersonList crew() const;
+    ~CreditsJob();
 
 Q_SIGNALS:
     void result(TmdbQt::CreditsJob *job);
@@ -53,7 +54,6 @@ private Q_SLOTS:
 private:
     friend class TheMovieDbApi;
     CreditsJob(const JobParams &params, int movieId);
-    ~CreditsJob();
 
     CreditsJobPrivate *d;
 };

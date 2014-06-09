@@ -41,6 +41,7 @@ public:
     bool hasError() const;
     QString errorMessage() const;
     TvShowDb result() const;
+    ~TvShowInfoJob();
 
 Q_SIGNALS:
     void result(TmdbQt::TvShowInfoJob *job);
@@ -51,7 +52,6 @@ private Q_SLOTS:
 private:
     friend class TheMovieDbApi;
     TvShowInfoJob(const JobParams &params, int tvid);
-    ~TvShowInfoJob();
 
     TvShowInfoJobPrivate *d;
 };

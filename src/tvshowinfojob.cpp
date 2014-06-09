@@ -54,6 +54,7 @@ TvShowInfoJob::TvShowInfoJob(const JobParams &params, int tvid)
 
 TvShowInfoJob::~TvShowInfoJob()
 {
+    delete d->m_reply;
     delete d;
 }
 
@@ -81,6 +82,9 @@ void TvShowInfoJob::requestFinished()
     }
     QJsonObject root = doc.object();
     d->m_result.load(root);
+
+    d->m_reply->deleteLater();
+    d->m_reply = 0;
 
     emit result(this);
     deleteLater();

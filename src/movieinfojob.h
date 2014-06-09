@@ -40,6 +40,7 @@ public:
     bool hasError() const;
     QString errorMessage() const;
     MovieDb result() const;
+    ~MovieInfoJob();
 
 Q_SIGNALS:
     void result(TmdbQt::MovieInfoJob *job);
@@ -50,7 +51,6 @@ private Q_SLOTS:
 private:
     friend class TheMovieDbApi;
     MovieInfoJob(const JobParams &params, int movieId);
-    ~MovieInfoJob();
 
     MovieInfoJobPrivate *d;
 };
