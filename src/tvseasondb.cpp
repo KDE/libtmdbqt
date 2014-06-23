@@ -85,7 +85,7 @@ QString TvSeasonDb::name() const
     return d->m_name;
 }
 
-QString TvSeasonDb::overview()
+QString TvSeasonDb::overview() const
 {
     return d->m_overview;
 }

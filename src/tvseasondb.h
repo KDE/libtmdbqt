@@ -52,7 +52,7 @@ public:
 
     // More details required
     QString name() const;
-    QString overview();
+    QString overview() const;
     TvEpisodeDbList episodes() const;
 
 private:
