@@ -50,7 +50,7 @@ public:
     QString posterPath() const;
     QUrl posterUrl(const QString &size) const;
 
-    // More details required
+    // More details (not available in TvShowInfoJob's result; requires TvSeasonInfoJob)
     QString name() const;
     QString overview() const;
     TvEpisodeDbList episodes() const;

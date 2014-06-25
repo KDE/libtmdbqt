@@ -49,7 +49,7 @@ public:
     QString posterPath() const;
     QString title() const;
 
-    // More details (requires MovieInfoJob)
+    // More details (not available in SearchJob's result; requires MovieInfoJob)
     int budget() const;
     QString overview() const;
     QStringList productionCompanyNames() const;

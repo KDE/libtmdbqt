@@ -53,7 +53,7 @@ public:
     QUrl posterUrl(const QString &size) const;
     QUrl backdropUrl(const QString &size) const;
 
-    // More details required (required TvShowInfoJob)
+    // More details (not available in TvSearchJob's result; requires TvShowInfoJob)
     QString overview() const;
     TvSeasonDbList seasons() const;
 
