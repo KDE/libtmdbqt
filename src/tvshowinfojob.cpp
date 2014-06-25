@@ -33,8 +33,9 @@ using namespace TmdbQt;
 class TmdbQt::TvShowInfoJobPrivate
 {
 public:
-    TvShowInfoJobPrivate(const JobParams &params)
-        : m_result(params.configuration), m_params(params) {}
+    TvShowInfoJobPrivate(int id, const JobParams &params)
+        : m_tvShowId(id), m_result(params.configuration), m_params(params) {}
+    int m_tvShowId;
     QNetworkReply *m_reply;
     QString m_errorMessage;
     TvShowDb m_result;
@@ -42,7 +43,7 @@ public:
 };
 
 TvShowInfoJob::TvShowInfoJob(const JobParams &params, int tvid)
-    : d(new TvShowInfoJobPrivate(params))
+    : d(tvid, new TvShowInfoJobPrivate(params))
 {
     QUrl url = params.baseUrl;
     url.setPath(url.path() + QStringLiteral("/tv/%1").arg(tvid));
@@ -56,6 +57,15 @@ TvShowInfoJob::~TvShowInfoJob()
 {
     delete d->m_reply;
     delete d;
+}
+
+/**
+ * @brief TvShowInfoJob::tvShowId
+ * @return the ID of the TV show, as passed to TheMovieDbApi::getTvShowInfo
+ */
+int TvShowInfoJob::tvShowId() const
+{
+    return d->m_tvShowId;
 }
 
 /**

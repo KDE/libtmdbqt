@@ -38,6 +38,8 @@ class TvShowInfoJob : public QObject
 {
     Q_OBJECT
 public:
+    int tvShowId() const;
+
     bool hasError() const;
     QString errorMessage() const;
     TvShowDb result() const;
