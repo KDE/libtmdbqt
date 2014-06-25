@@ -63,16 +63,28 @@ TvSearchJob::~TvSearchJob()
     delete d;
 }
 
+/**
+ * @brief TvSearchJob::hasError
+ * @return true if the job had an error
+ */
 bool TvSearchJob::hasError() const
 {
     return !errorMessage().isEmpty();
 }
 
+/**
+ * @brief TvSearchJob::errorMessage
+ * @return the error message for the job
+ */
 QString TvSearchJob::errorMessage() const
 {
     return d->m_errorMessage;
 }
 
+/**
+ * @brief TvSearchJob::result
+ * @return the job result: list of movies matching the search criteria, without details for each movie
+ */
 TvShowDbList TvSearchJob::result() const
 {
     return d->m_result;

@@ -59,21 +59,37 @@ CreditsJob::~CreditsJob()
     delete d;
 }
 
+/**
+ * @brief CreditsJob::hasError
+ * @return true if the job had an error
+ */
 bool CreditsJob::hasError() const
 {
     return !errorMessage().isEmpty();
 }
 
+/**
+ * @brief CreditsJob::errorMessage
+ * @return the error message for the job
+ */
 QString CreditsJob::errorMessage() const
 {
     return d->m_errorMessage;
 }
 
+/**
+ * @brief CreditsJob::cast
+ * @return first job result: the cast, i.e. the list of actors/actresses
+ */
 PersonList CreditsJob::cast() const
 {
     return d->m_cast;
 }
 
+/**
+ * @brief CreditsJob::crew
+ * @return second job result: the crew, i.e. everyone else who worked on the movie/show
+ */
 PersonList CreditsJob::crew() const
 {
     return d->m_crew;

@@ -62,16 +62,28 @@ SearchJob::~SearchJob()
     delete d;
 }
 
+/**
+ * @brief SearchJob::hasError
+ * @return true if the job had an error
+ */
 bool SearchJob::hasError() const
 {
     return !errorMessage().isEmpty();
 }
 
+/**
+ * @brief SearchJob::errorMessage
+ * @return the error message for the job
+ */
 QString SearchJob::errorMessage() const
 {
     return d->m_errorMessage;
 }
 
+/**
+ * @brief SearchJob::result
+ * @return the job result: list of movies matching the search criteria, without details for each movie
+ */
 MovieDbList SearchJob::result() const
 {
     return d->m_result;

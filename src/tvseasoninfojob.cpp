@@ -58,16 +58,28 @@ TvSeasonInfoJob::~TvSeasonInfoJob()
     delete d;
 }
 
+/**
+ * @brief TvSeasonInfoJob::hasError
+ * @return true if the job had an error
+ */
 bool TvSeasonInfoJob::hasError() const
 {
     return !errorMessage().isEmpty();
 }
 
+/**
+ * @brief TvSeasonInfoJob::errorMessage
+ * @return the error message for the job
+ */
 QString TvSeasonInfoJob::errorMessage() const
 {
     return d->m_errorMessage;
 }
 
+/**
+ * @brief TvSeasonInfoJob::result
+ * @return the job result: detailed information about a season
+ */
 TvSeasonDb TvSeasonInfoJob::result() const
 {
     return d->m_result;

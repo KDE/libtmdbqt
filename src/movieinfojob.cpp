@@ -57,16 +57,28 @@ MovieInfoJob::~MovieInfoJob()
     delete d;
 }
 
+/**
+ * @brief MovieInfoJob::hasError
+ * @return true if the job had an error
+ */
 bool MovieInfoJob::hasError() const
 {
     return !errorMessage().isEmpty();
 }
 
+/**
+ * @brief MovieInfoJob::errorMessage
+ * @return the error message for the job
+ */
 QString MovieInfoJob::errorMessage() const
 {
     return d->m_errorMessage;
 }
 
+/**
+ * @brief MovieInfoJob::result
+ * @return the job result: detailed information about a movie
+ */
 MovieDb MovieInfoJob::result() const
 {
     return d->m_result;
