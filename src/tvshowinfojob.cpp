@@ -43,7 +43,7 @@ public:
 };
 
 TvShowInfoJob::TvShowInfoJob(const JobParams &params, int tvid)
-    : d(tvid, new TvShowInfoJobPrivate(params))
+    : d(new TvShowInfoJobPrivate(tvid, params))
 {
     QUrl url = params.baseUrl;
     url.setPath(url.path() + QStringLiteral("/tv/%1").arg(tvid));
