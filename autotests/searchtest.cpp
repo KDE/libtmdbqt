@@ -50,6 +50,7 @@ private slots:
     void testTvShowInfo();
     void testTvSeasonInfo();
     void testCredits();
+    void testEpisodeCredits();
 
 private:
     TheMovieDbApi m_api;
@@ -205,7 +206,7 @@ void SearchTest::testCredits()
     QSignalSpy spy(job, SIGNAL(result(TmdbQt::CreditsJob*)));
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
-    PersonList cast = job->cast();
+    const PersonList cast = job->cast();
     QCOMPARE(cast.count(), 14);
     const Person firstPerson = cast.at(0);
     QCOMPARE(firstPerson.name(), QStringLiteral("Dany Boon"));
@@ -213,12 +214,24 @@ void SearchTest::testCredits()
     QVERIFY2(firstPerson.profilePath().contains(QLatin1String(".jpg")), qPrintable(firstPerson.profilePath()));
     // TODO profileUrl
 
-    PersonList crew = job->crew();
+    const PersonList crew = job->crew();
     QCOMPARE(crew.count(), 11);
     const Person firstCrew = crew.at(0);
     QCOMPARE(firstCrew.name(), QStringLiteral("Pascale Pouzadoux"));
     QCOMPARE(firstCrew.department(), QStringLiteral("Directing"));
     QCOMPARE(firstCrew.job(), QStringLiteral("Director"));
+}
+
+void SearchTest::testEpisodeCredits()
+{
+    CreditsJob *job = m_api.getEpisodeCredits(1396, 1, 2);
+    QSignalSpy spy(job, SIGNAL(result(TmdbQt::CreditsJob*)));
+    QVERIFY(spy.wait());
+    QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
+    const PersonList cast = job->cast();
+    QCOMPARE(cast.count(), 6);
+    const PersonList crew = job->crew();
+    QCOMPARE(crew.count(), 4);
 }
 
 QTEST_MAIN(SearchTest)

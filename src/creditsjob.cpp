@@ -47,9 +47,22 @@ CreditsJob::CreditsJob(const JobParams &params, int movieId)
 {
     QUrl url = params.baseUrl;
     url.setPath(url.path() + QStringLiteral("/movie/%1/credits").arg(movieId));
+    init(url);
+}
 
+CreditsJob::CreditsJob(const JobParams &params, int tvShowId, int seasonNum, int episodeNum)
+    : d(new CreditsJobPrivate(params))
+{
+    QUrl url = params.baseUrl;
+    url.setPath(url.path() + QStringLiteral("/tv/%1/season/%2/episode/%3/credits")
+                .arg(tvShowId).arg(seasonNum).arg(episodeNum));
+    init(url);
+}
+
+void CreditsJob::init(const QUrl &url)
+{
     QNetworkRequest request(url);
-    d->m_reply = params.qnam.get(request);
+    d->m_reply = d->m_params.qnam.get(request);
     connect(d->m_reply, SIGNAL(finished()), this, SLOT(requestFinished()));
 }
 

@@ -101,6 +101,11 @@ CreditsJob *TheMovieDbApi::getCredits(int movieId)
     return new CreditsJob(d->m_jobParams, movieId);
 }
 
+CreditsJob *TheMovieDbApi::getEpisodeCredits(int tvShowId, int seasonNum, int episodeNum)
+{
+    return new CreditsJob(d->m_jobParams, tvShowId, seasonNum, episodeNum);
+}
+
 Configuration &TheMovieDbApi::configuration() const
 {
     return d->m_configuration;

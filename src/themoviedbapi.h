@@ -59,6 +59,7 @@ public:
     TvShowInfoJob *getTvShowInfo(int tvshowId);
     TvSeasonInfoJob *getTvSeasonInfo(int tvshowId, int seasonNum);
     CreditsJob *getCredits(int movieId);
+    CreditsJob *getEpisodeCredits(int tvShowId, int seasonNum, int episodeNum);
 
     Configuration &configuration() const;
 

@@ -54,6 +54,8 @@ private Q_SLOTS:
 private:
     friend class TheMovieDbApi;
     CreditsJob(const JobParams &params, int movieId);
+    CreditsJob(const JobParams &params, int tvShowId, int seasonNum, int episodeNum);
+    void init(const QUrl &url);
 
     CreditsJobPrivate *d;
 };
