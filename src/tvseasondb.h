@@ -23,6 +23,7 @@
 #include "tmdbqt_export.h"
 #include <QString>
 #include <QDate>
+#include <QUrl>
 #include <QSharedDataPointer>
 #include <QJsonObject>
 
