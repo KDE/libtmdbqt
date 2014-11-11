@@ -113,6 +113,14 @@ Configuration &TheMovieDbApi::configuration() const
 
 void TheMovieDbApi::slotConfigurationReady()
 {
+    QNetworkReply* r = d->m_configurationReply;
+    if (r->error()) {
+        qDebug() << "ERROR" << r->errorString();
+        d->m_configurationReply->deleteLater();
+        d->m_configurationReply = 0;
+        return;
+    }
+
     const QByteArray data = d->m_configurationReply->readAll();
     QJsonDocument doc = QJsonDocument::fromJson(data);
     QJsonObject root = doc.object();
