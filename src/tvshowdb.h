@@ -25,6 +25,7 @@
 #include <QDate>
 #include <QUrl>
 #include <QSharedDataPointer>
+#include <QJsonObject>
 
 namespace TmdbQt
 {

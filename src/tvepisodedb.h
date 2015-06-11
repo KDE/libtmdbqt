@@ -25,6 +25,7 @@
 #include <QDate>
 #include <QSharedDataPointer>
 #include <QStringList>
+#include <QUrl>
 
 class QJsonObject;
 
