@@ -75,15 +75,18 @@ void SearchTest::testSearch()
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
     MovieDbList movies = job->result();
+    if (movies.count() > 1 && movies.at(1).id() == 15142) // "Dream a little dream" is "De l'autre côté du rêve", a fuzzy match...
+        movies.removeAt(1);
     QCOMPARE(movies.count(), 1);
     MovieDb movie = movies.first();
     QCOMPARE(movie.id(), 15709);
-    QCOMPARE(movie.releaseDate(), QDate(2008, 12, 9));
+    QCOMPARE(movie.releaseDate(), QDate(2008, 1, 7));
     QCOMPARE(movie.title(), QString::fromLatin1("Changing Sides"));
     QCOMPARE(movie.originalTitle(), title);
     QVERIFY(movie.backdropPath().contains(QLatin1String(".jpg")));
     QVERIFY(movie.posterPath().contains(QLatin1String(".jpg")));
-    QCOMPARE(movie.overview(), QString()); // not included here, needs MovieInfoJob
+    // new: the overview is actually available here
+    QCOMPARE(movie.overview(), QStringLiteral("Ariane and Hugo decide to exchange the lives they lead to escape from their routine, which after ten years of marriage, gives them the feeling of being hamsters in a wheel. She suddenly finds herself at the head of a construction equipment rental company and he tries to take the role of a house calling jewelry salesman...But is life really better when you live it on the other side of the bed?"));
 
     const QString backdrop = movie.backdropUrl(QLatin1String("w92")).toString();
     QVERIFY2(backdrop.startsWith(QLatin1String("http://image.tmdb.org/t/p/w92/")), qPrintable(backdrop));
@@ -102,7 +105,7 @@ void SearchTest::testTvSearch()
     QCOMPARE(tvshows.count(), 1);
     TvShowDb tvshow = tvshows.first();
     QCOMPARE(tvshow.id(), 1396);
-    QCOMPARE(tvshow.firstAiredDate(), QDate(2008, 1, 19));
+    QCOMPARE(tvshow.firstAiredDate(), QDate(2008, 1, 20));
     QCOMPARE(tvshow.name(), name);
     QCOMPARE(tvshow.originalName(), name);
     QVERIFY(tvshow.backdropPath().contains(QLatin1String(".jpg")));
@@ -123,7 +126,7 @@ void SearchTest::testMovieInfo()
 
     MovieDb movie = job->result();
     QCOMPARE(movie.overview(), QStringLiteral("Ariane and Hugo decide to exchange the lives they lead to escape from their routine, which after ten years of marriage, gives them the feeling of being hamsters in a wheel. She suddenly finds herself at the head of a construction equipment rental company and he tries to take the role of a house calling jewelry salesman...But is life really better when you live it on the other side of the bed?"));
-    QCOMPARE(movie.productionCompanyNames(), QStringList() << "Fidélité Films" << "TF1 Films Production" << "Orange Cinéma Séries" << "Wild Bunch" << "Mars Distribution" << "Procirep");
+    QCOMPARE(movie.productionCompanyNames(), QStringList() << "PROCIREP" << "Fidélité Films" << "OCS" << "Wild Bunch" << "Mars Distribution" << "TF1 Films Production");
     QCOMPARE(movie.budget(), 0); // not filled in
     QCOMPARE(movie.revenue(), 0); // not filled in
     QCOMPARE(movie.runtime(), 93);
@@ -137,7 +140,7 @@ void SearchTest::testMovieInfoFightClub()
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
 
     MovieDb movie = job->result();
-    QCOMPARE(movie.productionCompanyNames(), QStringList() << "20th Century Fox" << "Fox 2000 Pictures" << "Regency Enterprises");
+    QVERIFY(movie.productionCompanyNames().contains("20th Century Fox"));
     QCOMPARE(movie.budget(), 63000000);
     QCOMPARE(movie.revenue(), 100853753);
     QCOMPARE(movie.runtime(), 139);
@@ -151,7 +154,7 @@ void SearchTest::testTvShowInfo()
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
 
     TvShowDb tvshow = job->result();
-    QCOMPARE(tvshow.overview(), QStringLiteral("Breaking Bad is an American crime drama television series created and produced by Vince Gilligan. Set and produced in Albuquerque, New Mexico, Breaking Bad is the story of Walter White, a struggling high school chemistry teacher who is diagnosed with inoperable lung cancer at the beginning of the series. He turns to a life of crime, producing and selling methamphetamine, in order to secure his family's financial future before he dies, teaming with his former student, Jesse Pinkman. Heavily serialized, the series is known for positioning its characters in seemingly inextricable corners and has been labeled a contemporary western by its creator."));
+    QCOMPARE(tvshow.overview(), QStringLiteral("When Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime."));
 
     TvSeasonDbList seasons = tvshow.seasons();
     QCOMPARE(seasons.size(), 6);
@@ -164,7 +167,7 @@ void SearchTest::testTvShowInfo()
     QCOMPARE(seasons[5].seasonNumber(), 5);
 
     QCOMPARE(seasons[0].airDate(), QDate(2009, 2, 17));
-    QCOMPARE(seasons[1].airDate(), QDate(2008, 1, 19));
+    QCOMPARE(seasons[1].airDate(), QDate(2008, 1, 20));
     QCOMPARE(seasons[2].airDate(), QDate(2009, 3, 8));
     QCOMPARE(seasons[3].airDate(), QDate(2010, 3, 21));
     QCOMPARE(seasons[4].airDate(), QDate(2011, 7, 17));
@@ -187,13 +190,13 @@ void SearchTest::testTvSeasonInfo()
 
     TvSeasonDb season = job->result();
     QCOMPARE(season.id(), 3572);
-    QCOMPARE(season.overview(), QStringLiteral("The first season of the American television drama series Breaking Bad premiered on January 20, 2008 and concluded on March 9, 2008. It consisted of seven episodes, each running approximately 47 minutes in length, except the pilot episode which runs approximately 57 minutes. AMC broadcast the first season on Sundays at 10:00 pm in the United States. Season one was to consist of nine episodes, which was reduced to seven by the writer's strike. The complete first season was released on Region 1 DVD on February 24, 2009 and Region A Blu-ray on March 16, 2010."));
+    QCOMPARE(season.overview(), QStringLiteral("High school chemistry teacher Walter White's life is suddenly transformed by a dire medical diagnosis. Street-savvy former student Jesse Pinkman \"teaches\" Walter a new trade."));
     QCOMPARE(season.name(), QStringLiteral("Season 1"));
 
     TvEpisodeDbList episodes = season.episodes();
     QCOMPARE(episodes.size(), 7);
 
-    QCOMPARE(episodes[0].airDate(), QDate(2008, 1, 19));
+    QCOMPARE(episodes[0].airDate(), QDate(2008, 1, 20));
     QCOMPARE(episodes[0].episodeNumber(), 1);
     QCOMPARE(episodes[0].name(), QStringLiteral("Pilot"));
     QCOMPARE(episodes[0].overview(), QStringLiteral("When an unassuming high school chemistry teacher discovers he has a rare form of lung cancer, he decides to team up with a former student and create a top of the line crystal meth in a used RV, to provide for his family once he is gone."));
@@ -207,7 +210,7 @@ void SearchTest::testCredits()
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
     const PersonList cast = job->cast();
-    QCOMPARE(cast.count(), 14);
+    QVERIFY(cast.count() >= 30);
     const Person firstPerson = cast.at(0);
     QCOMPARE(firstPerson.name(), QStringLiteral("Dany Boon"));
     QCOMPARE(firstPerson.character(), QStringLiteral("Hugo Marciac"));

@@ -54,7 +54,7 @@ TheMovieDbApi::TheMovieDbApi(const QString &apiKey)
     d->m_apiKey = apiKey;
     QUrl url = d->baseUrl();
     d->m_jobParams.setBaseUrl(url);
-    url.setPath(url.path() + QLatin1String("configuration"));
+    url.setPath(url.path() + QLatin1String("/configuration"));
     //qDebug() << url;
     QNetworkRequest request(url);
     d->m_configurationReply = d->m_qnam.get(request);
@@ -132,7 +132,7 @@ void TheMovieDbApi::slotConfigurationReady()
 
 QUrl TheMovieDbApiPrivate::baseUrl() const
 {
-    static const char s_tmdbApiUrl[] = "http://api.themoviedb.org/3/";
+    static const char s_tmdbApiUrl[] = "http://api.themoviedb.org/3";
     QUrl url(QString::fromLatin1(s_tmdbApiUrl));
     url.addQueryItem(QLatin1String("api_key"), m_apiKey);
     return url;

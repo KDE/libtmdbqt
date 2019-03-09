@@ -45,7 +45,7 @@ TvSearchJob::TvSearchJob(const JobParams &params, const QString &name, int searc
     : d(new TvSearchJobPrivate(params))
 {
     QUrl url = params.baseUrl;
-    url.setPath(url.path() + QStringLiteral("search/tv"));
+    url.setPath(url.path() + QStringLiteral("/search/tv"));
     url.addQueryItem(QStringLiteral("query"), name);
     if (searchYear > 0)
         url.addQueryItem(QStringLiteral("first_air_date_year"), QString::number(searchYear));

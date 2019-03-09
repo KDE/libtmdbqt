@@ -165,3 +165,9 @@ void MovieDb::load(const QJsonObject &json)
     d->m_runtime = json.value(QStringLiteral("runtime")).toInt();
 
 }
+
+QDebug operator<<(QDebug dbg, const MovieDb &movie)
+{
+    dbg << '[' << movie.id() << movie.title() << ']';
+    return dbg;
+}

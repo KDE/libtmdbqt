@@ -44,7 +44,7 @@ SearchJob::SearchJob(const JobParams &params, const QString &movieName, int sear
     : d(new SearchJobPrivate(params))
 {
     QUrl url = params.baseUrl;
-    url.setPath(url.path() + QStringLiteral("search/movie"));
+    url.setPath(url.path() + QStringLiteral("/search/movie"));
     url.addQueryItem(QStringLiteral("query"), movieName);
     if (searchYear > 0)
         url.addQueryItem(QStringLiteral("year"), QString::number(searchYear));

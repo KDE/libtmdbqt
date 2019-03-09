@@ -70,4 +70,6 @@ private:
 
 } // namespace
 
+QDebug operator<<(QDebug dbg, const TmdbQt::MovieDb &movie);
+
 #endif
