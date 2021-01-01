@@ -42,7 +42,7 @@ public:
 
     bool hasError() const;
     QString errorMessage() const;
-    TvShowDb result() const;
+    TvShowDb searchResult() const;
     ~TvShowInfoJob();
 
 Q_SIGNALS:

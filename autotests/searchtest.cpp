@@ -153,7 +153,7 @@ void SearchTest::testTvShowInfo()
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
 
-    TvShowDb tvshow = job->result();
+    TvShowDb tvshow = job->searchResult();
     QCOMPARE(tvshow.overview(), QStringLiteral("When Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime."));
 
     TvSeasonDbList seasons = tvshow.seasons();

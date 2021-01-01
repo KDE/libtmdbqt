@@ -87,11 +87,11 @@ QString TvShowInfoJob::errorMessage() const
 }
 
 /**
- * @brief TvShowInfoJob::result
+ * @brief TvShowInfoJob::searchResult
  * @return the job result: information about a TV show, including a list of seasons, but
  * without details for the reasons.
  */
-TvShowDb TvShowInfoJob::result() const
+TvShowDb TvShowInfoJob::searchResult() const
 {
     return d->m_result;
 }
