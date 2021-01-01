@@ -124,7 +124,7 @@ void SearchTest::testMovieInfo()
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
 
-    MovieDb movie = job->result();
+    MovieDb movie = job->searchResult();
     QCOMPARE(movie.overview(), QStringLiteral("Ariane and Hugo decide to exchange the lives they lead to escape from their routine, which after ten years of marriage, gives them the feeling of being hamsters in a wheel. She suddenly finds herself at the head of a construction equipment rental company and he tries to take the role of a house calling jewelry salesman...But is life really better when you live it on the other side of the bed?"));
     QCOMPARE(movie.productionCompanyNames(), QStringList() << "PROCIREP" << "Fidélité Films" << "OCS" << "Wild Bunch" << "Mars Distribution" << "TF1 Films Production");
     QCOMPARE(movie.budget(), 0); // not filled in
@@ -139,7 +139,7 @@ void SearchTest::testMovieInfoFightClub()
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
 
-    MovieDb movie = job->result();
+    MovieDb movie = job->searchResult();
     QVERIFY(movie.productionCompanyNames().contains("20th Century Fox"));
     QCOMPARE(movie.budget(), 63000000);
     QCOMPARE(movie.revenue(), 100853753);

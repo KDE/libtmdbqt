@@ -76,10 +76,10 @@ QString MovieInfoJob::errorMessage() const
 }
 
 /**
- * @brief MovieInfoJob::result
+ * @brief MovieInfoJob::searchResult
  * @return the job result: detailed information about a movie
  */
-MovieDb MovieInfoJob::result() const
+MovieDb MovieInfoJob::searchResult() const
 {
     return d->m_result;
 }
