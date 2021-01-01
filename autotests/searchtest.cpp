@@ -220,9 +220,9 @@ void SearchTest::testCredits()
     const PersonList crew = job->crew();
     QCOMPARE(crew.count(), 11);
     const Person firstCrew = crew.at(0);
-    QCOMPARE(firstCrew.name(), QStringLiteral("Pascale Pouzadoux"));
-    QCOMPARE(firstCrew.department(), QStringLiteral("Directing"));
-    QCOMPARE(firstCrew.job(), QStringLiteral("Director"));
+    QCOMPARE(firstCrew.name(), QStringLiteral("Olivier Delbosc"));
+    QCOMPARE(firstCrew.department(), QStringLiteral("Production"));
+    QCOMPARE(firstCrew.job(), QStringLiteral("Producer"));
 }
 
 void SearchTest::testEpisodeCredits()
