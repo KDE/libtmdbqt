@@ -101,7 +101,7 @@ void SearchTest::testTvSearch()
     QSignalSpy spy(job, SIGNAL(result(TmdbQt::TvSearchJob*)));
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
-    TvShowDbList tvshows = job->result();
+    TvShowDbList tvshows = job->searchResult();
     QCOMPARE(tvshows.count(), 1);
     TvShowDb tvshow = tvshows.first();
     QCOMPARE(tvshow.id(), 1396);

@@ -46,11 +46,13 @@ TvSearchJob::TvSearchJob(const JobParams &params, const QString &name, int searc
 {
     QUrl url = params.baseUrl;
     url.setPath(url.path() + QStringLiteral("/search/tv"));
-    url.addQueryItem(QStringLiteral("query"), name);
+    QUrlQuery query(url);
+    query.addQueryItem(QStringLiteral("query"), name);
     if (searchYear > 0)
-        url.addQueryItem(QStringLiteral("first_air_date_year"), QString::number(searchYear));
+        query.addQueryItem(QStringLiteral("first_air_date_year"), QString::number(searchYear));
     if (!language.isEmpty())
-        url.addQueryItem(QStringLiteral("language"), language);
+        query.addQueryItem(QStringLiteral("language"), language);
+    url.setQuery(query);
 
     QNetworkRequest request(url);
     d->m_reply = params.qnam.get(request);
@@ -82,10 +84,10 @@ QString TvSearchJob::errorMessage() const
 }
 
 /**
- * @brief TvSearchJob::result
+ * @brief TvSearchJob::searchResult
  * @return the job result: list of movies matching the search criteria, without details for each movie
  */
-TvShowDbList TvSearchJob::result() const
+TvShowDbList TvSearchJob::searchResult() const
 {
     return d->m_result;
 }

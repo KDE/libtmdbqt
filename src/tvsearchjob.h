@@ -38,7 +38,7 @@ class TvSearchJob : public QObject
 public:
     bool hasError() const;
     QString errorMessage() const;
-    TvShowDbList result() const;
+    TvShowDbList searchResult() const;
     ~TvSearchJob();
 
 Q_SIGNALS:
