@@ -77,10 +77,10 @@ QString TvSeasonInfoJob::errorMessage() const
 }
 
 /**
- * @brief TvSeasonInfoJob::result
+ * @brief TvSeasonInfoJob::searchResult
  * @return the job result: detailed information about a season
  */
-TvSeasonDb TvSeasonInfoJob::result() const
+TvSeasonDb TvSeasonInfoJob::searchResult() const
 {
     return d->m_result;
 }

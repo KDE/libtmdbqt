@@ -134,6 +134,8 @@ QUrl TheMovieDbApiPrivate::baseUrl() const
 {
     static const char s_tmdbApiUrl[] = "http://api.themoviedb.org/3";
     QUrl url(QString::fromLatin1(s_tmdbApiUrl));
-    url.addQueryItem(QLatin1String("api_key"), m_apiKey);
+    QUrlQuery query(url);
+    query.addQueryItem(QLatin1String("api_key"), m_apiKey);
+    url.setQuery(query);
     return url;
 }

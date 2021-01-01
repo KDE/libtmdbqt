@@ -40,7 +40,7 @@ class TvSeasonInfoJob : public QObject
 public:
     bool hasError() const;
     QString errorMessage() const;
-    TvSeasonDb result() const;
+    TvSeasonDb searchResult() const;
     ~TvSeasonInfoJob();
 
 Q_SIGNALS:

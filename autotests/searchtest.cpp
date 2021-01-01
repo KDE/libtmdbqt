@@ -188,7 +188,7 @@ void SearchTest::testTvSeasonInfo()
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
 
-    TvSeasonDb season = job->result();
+    TvSeasonDb season = job->searchResult();
     QCOMPARE(season.id(), 3572);
     QCOMPARE(season.overview(), QStringLiteral("High school chemistry teacher Walter White's life is suddenly transformed by a dire medical diagnosis. Street-savvy former student Jesse Pinkman \"teaches\" Walter a new trade."));
     QCOMPARE(season.name(), QStringLiteral("Season 1"));
