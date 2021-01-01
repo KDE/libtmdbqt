@@ -74,7 +74,7 @@ void SearchTest::testSearch()
     QSignalSpy spy(job, SIGNAL(result(TmdbQt::SearchJob*)));
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
-    MovieDbList movies = job->result();
+    MovieDbList movies = job->searchResult();
     if (movies.count() > 1 && movies.at(1).id() == 15142) // "Dream a little dream" is "De l'autre côté du rêve", a fuzzy match...
         movies.removeAt(1);
     QCOMPARE(movies.count(), 1);

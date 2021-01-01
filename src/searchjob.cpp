@@ -45,11 +45,13 @@ SearchJob::SearchJob(const JobParams &params, const QString &movieName, int sear
 {
     QUrl url = params.baseUrl;
     url.setPath(url.path() + QStringLiteral("/search/movie"));
-    url.addQueryItem(QStringLiteral("query"), movieName);
+    QUrlQuery query(url);
+    query.addQueryItem(QStringLiteral("query"), movieName);
     if (searchYear > 0)
-        url.addQueryItem(QStringLiteral("year"), QString::number(searchYear));
+        query.addQueryItem(QStringLiteral("year"), QString::number(searchYear));
     if (!language.isEmpty())
-        url.addQueryItem(QStringLiteral("language"), language);
+        query.addQueryItem(QStringLiteral("language"), language);
+    url.setQuery(query);
 
     QNetworkRequest request(url);
     d->m_reply = params.qnam.get(request);
@@ -81,10 +83,10 @@ QString SearchJob::errorMessage() const
 }
 
 /**
- * @brief SearchJob::result
+ * @brief SearchJob::searchResult
  * @return the job result: list of movies matching the search criteria, without details for each movie
  */
-MovieDbList SearchJob::result() const
+MovieDbList SearchJob::searchResult() const
 {
     return d->m_result;
 }

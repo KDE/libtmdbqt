@@ -39,7 +39,7 @@ class TMDBQT_EXPORT SearchJob : public QObject
 public:
     bool hasError() const;
     QString errorMessage() const;
-    MovieDbList result() const;
+    MovieDbList searchResult() const;
     ~SearchJob();
 
 Q_SIGNALS:
