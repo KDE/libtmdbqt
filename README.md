@@ -16,10 +16,10 @@ Planned features:
 
 ## Links
 
-- themoviedb.org API: <http://www.themoviedb.org/documentation/api>
+- themoviedb.org API: <https://www.themoviedb.org/documentation/api>
 - Home page: None
 - Mailing list: None
 - Author: David Faure <faure@kde.org>
 - IRC channel: #kde-devel on Freenode
-- Git repository: git@git.kde.org:scratch/dfaure/libtmdbqt for now
+- Git repository: https://invent.kde.org/libraries/libtmdbqt
 
