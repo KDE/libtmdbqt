@@ -20,6 +20,6 @@ Planned features:
 - Home page: None
 - Mailing list: None
 - Author: David Faure <faure@kde.org>
-- IRC channel: #kde-devel on Freenode
+- IRC channel: #kde-devel on Libera Chat
 - Git repository: https://invent.kde.org/libraries/libtmdbqt
 
