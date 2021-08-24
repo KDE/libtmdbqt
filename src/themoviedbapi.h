@@ -69,9 +69,6 @@ Q_SIGNALS:
      */
     void initialized();
 
-private Q_SLOTS:
-    void slotConfigurationReady();
-
 private:
     TheMovieDbApiPrivate *d;
 };

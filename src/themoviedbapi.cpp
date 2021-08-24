@@ -40,14 +40,17 @@ public:
     TheMovieDbApiPrivate(const QString &apiKey)
         : m_apiKey(apiKey)
         , m_jobParams(m_qnam, m_configuration)
-    {}
+    {
+    }
+
+    QUrl baseUrl() const;
+    void slotConfigurationReady(TheMovieDbApi *q);
+
     QString m_apiKey;
     QNetworkAccessManager m_qnam;
     QNetworkReply *m_configurationReply;
     Configuration m_configuration;
     JobParams m_jobParams;
-
-    QUrl baseUrl() const;
 };
 
 TheMovieDbApi::TheMovieDbApi(const QString &apiKey)
@@ -59,7 +62,8 @@ TheMovieDbApi::TheMovieDbApi(const QString &apiKey)
     url.setPath(url.path() + QLatin1String("/configuration"));
     QNetworkRequest request(url);
     d->m_configurationReply = d->m_qnam.get(request);
-    connect(d->m_configurationReply, &QNetworkReply::finished, this, &TheMovieDbApi::slotConfigurationReady);
+    connect(d->m_configurationReply, &QNetworkReply::finished,
+            this, [this]() { d->slotConfigurationReady(this); });
 }
 
 TheMovieDbApi::~TheMovieDbApi()
@@ -112,23 +116,19 @@ Configuration &TheMovieDbApi::configuration() const
     return d->m_configuration;
 }
 
-void TheMovieDbApi::slotConfigurationReady()
+void TheMovieDbApiPrivate::slotConfigurationReady(TheMovieDbApi *q)
 {
-    QNetworkReply* r = d->m_configurationReply;
-    if (r->error()) {
-        qDebug() << "ERROR" << r->errorString();
-        d->m_configurationReply->deleteLater();
-        d->m_configurationReply = nullptr;
-        return;
+    if (m_configurationReply->error()) {
+        qDebug() << "ERROR" << m_configurationReply->errorString();
+    } else {
+        const QByteArray data = m_configurationReply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        QJsonObject root = doc.object();
+        m_configuration.load(root);
+        Q_EMIT q->initialized();
     }
-
-    const QByteArray data = d->m_configurationReply->readAll();
-    QJsonDocument doc = QJsonDocument::fromJson(data);
-    QJsonObject root = doc.object();
-    d->m_configuration.load(root);
-    emit initialized();
-    d->m_configurationReply->deleteLater();
-    d->m_configurationReply = nullptr;
+    m_configurationReply->deleteLater();
+    m_configurationReply = nullptr;
 }
 
 QUrl TheMovieDbApiPrivate::baseUrl() const
