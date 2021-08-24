@@ -48,7 +48,7 @@ MovieInfoJob::MovieInfoJob(const JobParams &params, int movieId)
 
     QNetworkRequest request(url);
     d->m_reply = params.qnam.get(request);
-    connect(d->m_reply, SIGNAL(finished()), this, SLOT(requestFinished()));
+    connect(d->m_reply, &QNetworkReply::finished, this, &MovieInfoJob::requestFinished);
 }
 
 MovieInfoJob::~MovieInfoJob()

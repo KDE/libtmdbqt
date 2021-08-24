@@ -50,7 +50,7 @@ TvShowInfoJob::TvShowInfoJob(const JobParams &params, int tvid)
 
     QNetworkRequest request(url);
     d->m_reply = params.qnam.get(request);
-    connect(d->m_reply, SIGNAL(finished()), this, SLOT(requestFinished()));
+    connect(d->m_reply, &QNetworkReply::finished, this, &TvShowInfoJob::requestFinished);
 }
 
 TvShowInfoJob::~TvShowInfoJob()

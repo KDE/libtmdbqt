@@ -62,7 +62,7 @@ SearchTest::SearchTest()
     : m_api(QString::fromLatin1(s_key))
 {
     QVERIFY(!m_api.isInitialized());
-    QSignalSpy initSpy(&m_api, SIGNAL(initialized()));
+    QSignalSpy initSpy(&m_api, &TheMovieDbApi::initialized);
     QVERIFY(initSpy.wait());
     QVERIFY(m_api.isInitialized());
 }
@@ -71,7 +71,7 @@ void SearchTest::testSearch()
 {
     const QString title = QString::fromUtf8("De l'autre côté du lit");
     SearchJob *job = m_api.searchMovie(title);
-    QSignalSpy spy(job, SIGNAL(result(TmdbQt::SearchJob*)));
+    QSignalSpy spy(job, &SearchJob::result);
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
     MovieDbList movies = job->searchResult();
@@ -98,7 +98,7 @@ void SearchTest::testTvSearch()
 {
     const QString name = QString::fromLatin1("Breaking Bad");
     TvSearchJob *job = m_api.searchTvShow(name);
-    QSignalSpy spy(job, SIGNAL(result(TmdbQt::TvSearchJob*)));
+    QSignalSpy spy(job, &TvSearchJob::result);
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
     TvShowDbList tvshows = job->searchResult();
@@ -120,7 +120,7 @@ void SearchTest::testTvSearch()
 void SearchTest::testMovieInfo()
 {
     MovieInfoJob *job = m_api.getMovieInfo(15709);
-    QSignalSpy spy(job, SIGNAL(result(TmdbQt::MovieInfoJob*)));
+    QSignalSpy spy(job, &MovieInfoJob::result);
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
 
@@ -135,7 +135,7 @@ void SearchTest::testMovieInfo()
 void SearchTest::testMovieInfoFightClub()
 {
     MovieInfoJob *job = m_api.getMovieInfo(550);
-    QSignalSpy spy(job, SIGNAL(result(TmdbQt::MovieInfoJob*)));
+    QSignalSpy spy(job, &MovieInfoJob::result);
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
 
@@ -149,7 +149,7 @@ void SearchTest::testMovieInfoFightClub()
 void SearchTest::testTvShowInfo()
 {
     TvShowInfoJob *job = m_api.getTvShowInfo(1396);
-    QSignalSpy spy(job, SIGNAL(result(TmdbQt::TvShowInfoJob*)));
+    QSignalSpy spy(job, &TvShowInfoJob::result);
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
 
@@ -184,7 +184,7 @@ void SearchTest::testTvShowInfo()
 void SearchTest::testTvSeasonInfo()
 {
     TvSeasonInfoJob *job = m_api.getTvSeasonInfo(1396, 1);
-    QSignalSpy spy(job, SIGNAL(result(TmdbQt::TvSeasonInfoJob*)));
+    QSignalSpy spy(job, &TvSeasonInfoJob::result);
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
 
@@ -206,7 +206,7 @@ void SearchTest::testTvSeasonInfo()
 void SearchTest::testCredits()
 {
     CreditsJob *job = m_api.getCredits(15709);
-    QSignalSpy spy(job, SIGNAL(result(TmdbQt::CreditsJob*)));
+    QSignalSpy spy(job, &CreditsJob::result);
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
     const PersonList cast = job->cast();
@@ -228,7 +228,7 @@ void SearchTest::testCredits()
 void SearchTest::testEpisodeCredits()
 {
     CreditsJob *job = m_api.getEpisodeCredits(1396, 1, 2);
-    QSignalSpy spy(job, SIGNAL(result(TmdbQt::CreditsJob*)));
+    QSignalSpy spy(job, &CreditsJob::result);
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
     const PersonList cast = job->cast();

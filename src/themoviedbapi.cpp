@@ -59,7 +59,7 @@ TheMovieDbApi::TheMovieDbApi(const QString &apiKey)
     url.setPath(url.path() + QLatin1String("/configuration"));
     QNetworkRequest request(url);
     d->m_configurationReply = d->m_qnam.get(request);
-    connect(d->m_configurationReply, SIGNAL(finished()), this, SLOT(slotConfigurationReady()));
+    connect(d->m_configurationReply, &QNetworkReply::finished, this, &TheMovieDbApi::slotConfigurationReady);
 }
 
 TheMovieDbApi::~TheMovieDbApi()

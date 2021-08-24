@@ -63,7 +63,7 @@ void CreditsJob::init(const QUrl &url)
 {
     QNetworkRequest request(url);
     d->m_reply = d->m_params.qnam.get(request);
-    connect(d->m_reply, SIGNAL(finished()), this, SLOT(requestFinished()));
+    connect(d->m_reply, &QNetworkReply::finished, this, &CreditsJob::requestFinished);
 }
 
 CreditsJob::~CreditsJob()

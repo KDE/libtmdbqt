@@ -56,7 +56,7 @@ TvSearchJob::TvSearchJob(const JobParams &params, const QString &name, int searc
 
     QNetworkRequest request(url);
     d->m_reply = params.qnam.get(request);
-    connect(d->m_reply, SIGNAL(finished()), this, SLOT(requestFinished()));
+    connect(d->m_reply, &QNetworkReply::finished, this, &TvSearchJob::requestFinished);
 }
 
 TvSearchJob::~TvSearchJob()
