@@ -59,6 +59,7 @@ TheMovieDbApi::TheMovieDbApi(const QString &apiKey)
     QUrl url = d->baseUrl();
     d->m_jobParams.setBaseUrl(url);
 
+    // See https://developers.themoviedb.org/3/configuration/get-api-configuration
     url.setPath(url.path() + QLatin1String("/configuration"));
     QNetworkRequest request(url);
     d->m_configurationReply = d->m_qnam.get(request);
