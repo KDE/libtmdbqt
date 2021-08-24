@@ -55,21 +55,15 @@ else (TMDBQT_STATIC_BUILD)
     )
 endif(TMDBQT_STATIC_BUILD)
 
-if(Qt5Core_FOUND)
-  set_property(TARGET ${TMDBQT_LIB_SONAME} APPEND PROPERTY COMPILE_DEFINITIONS QT_DISABLE_DEPRECATED_BEFORE=0)
-endif()
+#set_property(TARGET ${TMDBQT_LIB_SONAME} APPEND PROPERTY COMPILE_DEFINITIONS QT_DISABLE_DEPRECATED_BEFORE=0)
 
 target_link_libraries(${TMDBQT_LIB_SONAME}
 PUBLIC
-  Qt5::Core
+  Qt${QT_VERSION_MAJOR}::Core
 PRIVATE
-  Qt5::Network
+  Qt${QT_VERSION_MAJOR}::Network
 )
-if (Qt5Core_FOUND)
 target_include_directories(${TMDBQT_LIB_SONAME} INTERFACE $<INSTALL_INTERFACE:${INCLUDE_DESTINATION}/${TMDBQT_LIB_SONAME}>)
-else ()
-target_include_directories(${TMDBQT_LIB_SONAME} INTERFACE $<INSTALL_INTERFACE:${INCLUDE_DESTINATION}>)
-endif ()
 install(TARGETS ${TMDBQT_LIB_SONAME} EXPORT LibTmdbQtExport ARCHIVE DESTINATION ${LIB_DESTINATION}
                                LIBRARY DESTINATION ${LIB_DESTINATION}
                                RUNTIME DESTINATION bin)
@@ -95,34 +89,8 @@ set(TMDBQT_HEADERS
    person.h
 )
 
-if (Qt5Core_FOUND)
-  install(FILES ${TMDBQT_HEADERS}
-    ${CMAKE_CURRENT_BINARY_DIR}/version.h
-    DESTINATION ${INCLUDE_DESTINATION}/${TMDBQT_LIB_SONAME}/tmdbqt/ COMPONENT Devel
-  )
-else()
-  install(FILES ${TMDBQT_HEADERS}
-    ${CMAKE_CURRENT_BINARY_DIR}/version.h
-    DESTINATION ${INCLUDE_DESTINATION}/tmdbqt/ COMPONENT Devel
-  )
-endif()
-
-# Install package config file
-if(NOT WIN32)
-if (Qt5Core_FOUND)
-   #configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/libTmdbQt5.pc.cmake
-   #${CMAKE_CURRENT_BINARY_DIR}/lib${TMDBQT_LIB_SONAME}.pc
-   #)
-   #install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${TMDBQT_LIB_SONAME}.pc
-   #DESTINATION ${LIB_DESTINATION}/pkgconfig
-   #)
-else()
-   #configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/libtmdbqt.pc.cmake
-   #${CMAKE_CURRENT_BINARY_DIR}/lib${TMDBQT_LIB_SONAME}.pc
-   #)
-   #install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${TMDBQT_LIB_SONAME}.pc
-   #DESTINATION ${LIB_DESTINATION}/pkgconfig
-   #)
-endif()
-endif(NOT WIN32)
+install(FILES ${TMDBQT_HEADERS}
+  ${CMAKE_CURRENT_BINARY_DIR}/version.h
+  DESTINATION ${INCLUDE_DESTINATION}/${TMDBQT_LIB_SONAME}/tmdbqt/ COMPONENT Devel
+)
 

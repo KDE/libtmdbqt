@@ -4,10 +4,14 @@ cmake_minimum_required(VERSION 3.5)
 set(CMAKE_AUTOMOC TRUE)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 set(QT_REQUIRED_VERSION 5.1.0)
-find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED Core Network)
+find_package(QT NAMES Qt6 Qt5 CONFIG REQUIRED COMPONENTS Core Network)
+find_package(Qt${QT_VERSION_MAJOR} ${QT_REQUIRED_VERSION} CONFIG REQUIRED COMPONENTS Core Network)
 
 # Used to create CMake config files
 include(CMakePackageConfigHelpers)
@@ -22,8 +26,8 @@ set(INCLUDE_DESTINATION     "${CMAKE_INSTALL_FULL_INCLUDEDIR}" CACHE PATH "The s
 set(CMAKE_LIBTMDBQT_VERSION_MAJOR 1)
 set(CMAKE_LIBTMDBQT_VERSION_MINOR 0)
 set(CMAKE_LIBTMDBQT_VERSION_PATCH 0)
-set(TMDBQT_LIB_SONAME TmdbQt5)
-set(TMDBQT_LIB_SONAME_CAMEL TmdbQt5)
+set(TMDBQT_LIB_SONAME TmdbQt${QT_VERSION_MAJOR})
+set(TMDBQT_LIB_SONAME_CAMEL TmdbQt${QT_VERSION_MAJOR})
 set(TMDBQT_LIB_NAMESPACE TmdbQt)
 set(CMAKE_LIBTMDBQT_VERSION_STRING "${CMAKE_LIBTMDBQT_VERSION_MAJOR}.${CMAKE_LIBTMDBQT_VERSION_MINOR}.${CMAKE_LIBTMDBQT_VERSION_PATCH}")
 
@@ -49,7 +53,7 @@ add_subdirectory(src)
 option(TMDBQT_ENABLE_TESTS "Enable tests" ON)
 if (TMDBQT_ENABLE_TESTS)
     enable_testing()
-    find_package(Qt5 ${QT_REQUIRED_VERSION} CONFIG REQUIRED Test)
+    find_package(Qt${QT_VERSION_MAJOR} ${QT_REQUIRED_VERSION} CONFIG REQUIRED Test)
     add_subdirectory(autotests)
 endif (TMDBQT_ENABLE_TESTS)
 
@@ -60,7 +64,7 @@ write_basic_package_version_file(${tmdbqt_BINARY_DIR}/${TMDBQT_LIB_SONAME_CAMEL}
                                 )
 
 # Create the CMake Config files
-configure_package_config_file(${TMDBQT_LIB_SONAME_CAMEL}Config.cmake.in
+configure_package_config_file(TmdbQtConfig.cmake.in
                               ${tmdbqt_BINARY_DIR}/${TMDBQT_LIB_SONAME_CAMEL}Config.cmake
                               INSTALL_DESTINATION ${LIB_DESTINATION}/cmake/${TMDBQT_LIB_SONAME_CAMEL}
                               PATH_VARS LIB_DESTINATION INCLUDE_DESTINATION

@@ -32,6 +32,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QUrl>
+#include <QUrlQuery>
 using namespace TmdbQt;
 
 class TmdbQt::TheMovieDbApiPrivate
