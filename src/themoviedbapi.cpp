@@ -69,7 +69,7 @@ TheMovieDbApi::~TheMovieDbApi()
 
 bool TheMovieDbApi::isInitialized() const
 {
-    return d->m_configurationReply == 0;
+    return d->m_configurationReply == nullptr;
 }
 
 SearchJob *TheMovieDbApi::searchMovie(const QString &movieName, int searchYear, const QString &language)
@@ -118,7 +118,7 @@ void TheMovieDbApi::slotConfigurationReady()
     if (r->error()) {
         qDebug() << "ERROR" << r->errorString();
         d->m_configurationReply->deleteLater();
-        d->m_configurationReply = 0;
+        d->m_configurationReply = nullptr;
         return;
     }
 
@@ -128,7 +128,7 @@ void TheMovieDbApi::slotConfigurationReady()
     d->m_configuration.load(root);
     emit initialized();
     d->m_configurationReply->deleteLater();
-    d->m_configurationReply = 0;
+    d->m_configurationReply = nullptr;
 }
 
 QUrl TheMovieDbApiPrivate::baseUrl() const

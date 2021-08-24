@@ -104,7 +104,7 @@ void SearchJob::requestFinished()
     d->m_result.load(results, d->m_params.configuration);
 
     d->m_reply->deleteLater();
-    d->m_reply = 0;
+    d->m_reply = nullptr;
 
     emit result(this);
     deleteLater();

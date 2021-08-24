@@ -96,7 +96,7 @@ void TvSeasonInfoJob::requestFinished()
     d->m_result.load(root);
 
     d->m_reply->deleteLater();
-    d->m_reply = 0;
+    d->m_reply = nullptr;
 
     emit result(this);
     deleteLater();
