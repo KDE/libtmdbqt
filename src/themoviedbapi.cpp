@@ -37,8 +37,10 @@ using namespace TmdbQt;
 class TmdbQt::TheMovieDbApiPrivate
 {
 public:
-    TheMovieDbApiPrivate()
-        : m_jobParams(m_qnam, m_configuration) {}
+    TheMovieDbApiPrivate(const QString &apiKey)
+        : m_apiKey(apiKey)
+        , m_jobParams(m_qnam, m_configuration)
+    {}
     QString m_apiKey;
     QNetworkAccessManager m_qnam;
     QNetworkReply *m_configurationReply;
@@ -49,13 +51,12 @@ public:
 };
 
 TheMovieDbApi::TheMovieDbApi(const QString &apiKey)
-    : d(new TheMovieDbApiPrivate)
+    : d(new TheMovieDbApiPrivate(apiKey))
 {
-    d->m_apiKey = apiKey;
     QUrl url = d->baseUrl();
     d->m_jobParams.setBaseUrl(url);
+
     url.setPath(url.path() + QLatin1String("/configuration"));
-    //qDebug() << url;
     QNetworkRequest request(url);
     d->m_configurationReply = d->m_qnam.get(request);
     connect(d->m_configurationReply, SIGNAL(finished()), this, SLOT(slotConfigurationReady()));
