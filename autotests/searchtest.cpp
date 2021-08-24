@@ -80,7 +80,7 @@ void SearchTest::testSearch()
     QCOMPARE(movies.count(), 1);
     MovieDb movie = movies.first();
     QCOMPARE(movie.id(), 15709);
-    QCOMPARE(movie.releaseDate(), QDate(2008, 1, 7));
+    QCOMPARE(movie.releaseDate(), QDate(2009, 1, 7));
     QCOMPARE(movie.title(), QString::fromLatin1("Changing Sides"));
     QCOMPARE(movie.originalTitle(), title);
     QVERIFY(movie.backdropPath().contains(QLatin1String(".jpg")));
@@ -166,7 +166,7 @@ void SearchTest::testTvShowInfo()
     QCOMPARE(seasons[4].seasonNumber(), 4);
     QCOMPARE(seasons[5].seasonNumber(), 5);
 
-    QCOMPARE(seasons[0].airDate(), QDate(2009, 2, 17));
+    QCOMPARE(seasons[0].airDate(), QDate(2009, 2, 16));
     QCOMPARE(seasons[1].airDate(), QDate(2008, 1, 20));
     QCOMPARE(seasons[2].airDate(), QDate(2009, 3, 8));
     QCOMPARE(seasons[3].airDate(), QDate(2010, 3, 21));
