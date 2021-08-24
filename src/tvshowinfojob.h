@@ -43,7 +43,7 @@ public:
     bool hasError() const;
     QString errorMessage() const;
     TvShowDb searchResult() const;
-    ~TvShowInfoJob();
+    ~TvShowInfoJob() override;
 
 Q_SIGNALS:
     void result(TmdbQt::TvShowInfoJob *job);

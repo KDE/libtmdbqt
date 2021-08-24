@@ -40,7 +40,7 @@ public:
     bool hasError() const;
     QString errorMessage() const;
     MovieDbList searchResult() const;
-    ~SearchJob();
+    ~SearchJob() override;
 
 Q_SIGNALS:
     void result(TmdbQt::SearchJob *job);

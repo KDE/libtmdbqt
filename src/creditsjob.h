@@ -43,7 +43,7 @@ public:
 
     PersonList cast() const;
     PersonList crew() const;
-    ~CreditsJob();
+    ~CreditsJob() override;
 
 Q_SIGNALS:
     void result(TmdbQt::CreditsJob *job);

@@ -43,7 +43,7 @@ class TMDBQT_EXPORT TheMovieDbApi : public QObject
     Q_OBJECT
 public:
     TheMovieDbApi(const QString &apiKey);
-    ~TheMovieDbApi();
+    ~TheMovieDbApi() override;
 
     bool isInitialized() const;
 

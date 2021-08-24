@@ -41,7 +41,7 @@ public:
     bool hasError() const;
     QString errorMessage() const;
     TvSeasonDb searchResult() const;
-    ~TvSeasonInfoJob();
+    ~TvSeasonInfoJob() override;
 
 Q_SIGNALS:
     void result(TmdbQt::TvSeasonInfoJob *job);
