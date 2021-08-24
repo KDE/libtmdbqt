@@ -28,6 +28,7 @@ using namespace TmdbQt;
 static QStringList readStringList(const QJsonArray &array)
 {
     QStringList list;
+    list.reserve(array.size());
     std::transform(array.begin(), array.end(), std::back_inserter(list), [](const QJsonValue &v) { return v.toString(); } );
     return list;
 }
