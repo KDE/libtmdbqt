@@ -54,8 +54,7 @@ SearchJob::SearchJob(const JobParams &params, const QString &movieName, int sear
         query.addQueryItem(QStringLiteral("language"), language);
     url.setQuery(query);
 
-    QNetworkRequest request(url);
-    d->m_reply = params.qnam.get(request);
+    d->m_reply = params.get(url);
     connect(d->m_reply, &QNetworkReply::finished, this, &SearchJob::requestFinished);
 }
 
@@ -94,15 +93,21 @@ MovieDbList SearchJob::searchResult() const
 
 void SearchJob::requestFinished()
 {
-    const QByteArray data = d->m_reply->readAll();
-    //qDebug() << data;
-    QJsonDocument doc = QJsonDocument::fromJson(data);
-    if (doc.isNull()) {
-        d->m_errorMessage = QStringLiteral("Invalid json received");
+    if (d->m_reply->error() != QNetworkReply::NoError) {
+        d->m_errorMessage = d->m_reply->errorString();
+        qWarning() << "TmdbQt: search/movie request failed:" << d->m_reply->errorString()
+                   << d->m_reply->url().toString();
+    } else {
+        const QByteArray data = d->m_reply->readAll();
+        //qDebug() << data;
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if (doc.isNull()) {
+            d->m_errorMessage = QStringLiteral("Invalid json received");
+        }
+        QJsonObject root = doc.object();
+        QJsonArray results = root.value(QStringLiteral("results")).toArray();
+        d->m_result.load(results, d->m_params.configuration);
     }
-    QJsonObject root = doc.object();
-    QJsonArray results = root.value(QStringLiteral("results")).toArray();
-    d->m_result.load(results, d->m_params.configuration);
 
     d->m_reply->deleteLater();
     d->m_reply = nullptr;

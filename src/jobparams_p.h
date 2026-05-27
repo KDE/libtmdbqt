@@ -24,6 +24,7 @@
 #include <QUrl>
 
 class QNetworkAccessManager;
+class QNetworkReply;
 
 namespace TmdbQt
 {
@@ -40,6 +41,13 @@ public:
         : qnam(nam), configuration(config) {}
 
     void setBaseUrl(const QUrl &url) { baseUrl = url; }
+
+    /**
+     * Issues a GET request for @p url through the shared QNetworkAccessManager.
+     * Centralizes request setup so every job gets the same configuration
+     * (notably HTTP/2 disabled, see jobparams.cpp).
+     */
+    QNetworkReply *get(const QUrl &url) const;
 
     QNetworkAccessManager &qnam;
     Configuration &configuration;

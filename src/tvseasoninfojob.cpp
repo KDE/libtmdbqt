@@ -47,8 +47,7 @@ TvSeasonInfoJob::TvSeasonInfoJob(const JobParams &params, int tvid, int seasonNu
     QUrl url = params.baseUrl;
     url.setPath(url.path() + QStringLiteral("/tv/%1/season/%2").arg(tvid).arg(seasonNum));
 
-    QNetworkRequest request(url);
-    d->m_reply = params.qnam.get(request);
+    d->m_reply = params.get(url);
     connect(d->m_reply, &QNetworkReply::finished, this, &TvSeasonInfoJob::requestFinished);
 }
 
@@ -87,13 +86,19 @@ TvSeasonDb TvSeasonInfoJob::searchResult() const
 
 void TvSeasonInfoJob::requestFinished()
 {
-    const QByteArray data = d->m_reply->readAll();
-    QJsonDocument doc = QJsonDocument::fromJson(data);
-    if (doc.isNull()) {
-        d->m_errorMessage = QStringLiteral("Invalid json received");
+    if (d->m_reply->error() != QNetworkReply::NoError) {
+        d->m_errorMessage = d->m_reply->errorString();
+        qWarning() << "TmdbQt: tv season info request failed:" << d->m_reply->errorString()
+                   << d->m_reply->url().toString();
+    } else {
+        const QByteArray data = d->m_reply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if (doc.isNull()) {
+            d->m_errorMessage = QStringLiteral("Invalid json received");
+        }
+        QJsonObject root = doc.object();
+        d->m_result.load(root);
     }
-    QJsonObject root = doc.object();
-    d->m_result.load(root);
 
     d->m_reply->deleteLater();
     d->m_reply = nullptr;

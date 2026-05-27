@@ -20,6 +20,7 @@ configure_file(tmdbqt_export.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/tmdbqt_export.h
 
 set(tmdbqt_SRCS
    themoviedbapi.cpp
+   jobparams.cpp
    searchjob.cpp
    creditsjob.cpp
    movieinfojob.cpp

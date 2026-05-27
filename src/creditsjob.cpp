@@ -61,8 +61,7 @@ CreditsJob::CreditsJob(const JobParams &params, int tvShowId, int seasonNum, int
 
 void CreditsJob::init(const QUrl &url)
 {
-    QNetworkRequest request(url);
-    d->m_reply = d->m_params.qnam.get(request);
+    d->m_reply = d->m_params.get(url);
     connect(d->m_reply, &QNetworkReply::finished, this, &CreditsJob::requestFinished);
 }
 
@@ -110,19 +109,25 @@ PersonList CreditsJob::crew() const
 
 void CreditsJob::requestFinished()
 {
-    const QByteArray data = d->m_reply->readAll();
-    //qDebug() << data;
-    QJsonDocument doc = QJsonDocument::fromJson(data);
-    if (doc.isNull()) {
-        d->m_errorMessage = QStringLiteral("Invalid json received\n") + QString::fromUtf8(data);
+    if (d->m_reply->error() != QNetworkReply::NoError) {
+        d->m_errorMessage = d->m_reply->errorString();
+        qWarning() << "TmdbQt: credits request failed:" << d->m_reply->errorString()
+                   << d->m_reply->url().toString();
+    } else {
+        const QByteArray data = d->m_reply->readAll();
+        //qDebug() << data;
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if (doc.isNull()) {
+            d->m_errorMessage = QStringLiteral("Invalid json received\n") + QString::fromUtf8(data);
+        }
+        QJsonObject root = doc.object();
+
+        QJsonArray castArray = root.value(QStringLiteral("cast")).toArray();
+        d->m_cast.load(castArray, d->m_params.configuration, Person::Cast);
+
+        QJsonArray crewArray = root.value(QStringLiteral("crew")).toArray();
+        d->m_crew.load(crewArray, d->m_params.configuration, Person::Crew);
     }
-    QJsonObject root = doc.object();
-
-    QJsonArray castArray = root.value(QStringLiteral("cast")).toArray();
-    d->m_cast.load(castArray, d->m_params.configuration, Person::Cast);
-
-    QJsonArray crewArray = root.value(QStringLiteral("crew")).toArray();
-    d->m_crew.load(crewArray, d->m_params.configuration, Person::Crew);
 
     d->m_reply->deleteLater();
     d->m_reply = nullptr;

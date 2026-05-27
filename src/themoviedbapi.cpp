@@ -62,8 +62,7 @@ TheMovieDbApi::TheMovieDbApi(const QString &apiKey)
 
     // See https://developers.themoviedb.org/3/configuration/get-api-configuration
     url.setPath(url.path() + QLatin1String("/configuration"));
-    QNetworkRequest request(url);
-    d->m_configurationReply = d->m_qnam.get(request);
+    d->m_configurationReply = d->m_jobParams.get(url);
     connect(d->m_configurationReply, &QNetworkReply::finished,
             this, [this]() { d->slotConfigurationReady(this); });
 }
@@ -121,7 +120,8 @@ Configuration &TheMovieDbApi::configuration() const
 void TheMovieDbApiPrivate::slotConfigurationReady(TheMovieDbApi *q)
 {
     if (m_configurationReply->error()) {
-        qDebug() << "ERROR" << m_configurationReply->errorString();
+        qWarning() << "TmdbQt: configuration request failed:"
+                   << m_configurationReply->errorString();
     } else {
         const QByteArray data = m_configurationReply->readAll();
         QJsonDocument doc = QJsonDocument::fromJson(data);
