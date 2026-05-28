@@ -52,6 +52,7 @@ public:
     QNetworkReply *m_configurationReply;
     Configuration m_configuration;
     JobParams m_jobParams;
+    int m_configRetriesLeft = 1;
 };
 
 TheMovieDbApi::TheMovieDbApi(const QString &apiKey)
@@ -120,6 +121,13 @@ Configuration &TheMovieDbApi::configuration() const
 void TheMovieDbApiPrivate::slotConfigurationReady(TheMovieDbApi *q)
 {
     if (m_configurationReply->error()) {
+        if (QNetworkReply *retry =
+                m_jobParams.retryIfTransient(m_configurationReply, m_configRetriesLeft)) {
+            m_configurationReply = retry;
+            QObject::connect(m_configurationReply, &QNetworkReply::finished, q,
+                             [this, q]() { slotConfigurationReady(q); });
+            return;
+        }
         qWarning() << "TmdbQt: configuration request failed:"
                    << m_configurationReply->errorString();
     } else {
@@ -135,7 +143,10 @@ void TheMovieDbApiPrivate::slotConfigurationReady(TheMovieDbApi *q)
 
 QUrl TheMovieDbApiPrivate::baseUrl() const
 {
-    static const char s_tmdbApiUrl[] = "http://api.themoviedb.org/3";
+    // HTTPS, not HTTP: TMDB redirects http->https anyway, and avoiding the redirect
+    // means our IPv4-preferring rewrite (see JobParams::get) survives — otherwise the
+    // redirected URL would be re-resolved by QNAM and could land back on IPv6.
+    static const char s_tmdbApiUrl[] = "https://api.themoviedb.org/3";
     QUrl url(QString::fromLatin1(s_tmdbApiUrl));
     QUrlQuery query(url);
     query.addQueryItem(QLatin1String("api_key"), m_apiKey);

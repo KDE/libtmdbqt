@@ -39,6 +39,7 @@ public:
     QString m_errorMessage;
     TvSeasonDb m_result;
     const JobParams &m_params;
+    int m_retriesLeft = 1;
 };
 
 TvSeasonInfoJob::TvSeasonInfoJob(const JobParams &params, int tvid, int seasonNum)
@@ -87,6 +88,11 @@ TvSeasonDb TvSeasonInfoJob::searchResult() const
 void TvSeasonInfoJob::requestFinished()
 {
     if (d->m_reply->error() != QNetworkReply::NoError) {
+        if (QNetworkReply *retry = d->m_params.retryIfTransient(d->m_reply, d->m_retriesLeft)) {
+            d->m_reply = retry;
+            connect(d->m_reply, &QNetworkReply::finished, this, &TvSeasonInfoJob::requestFinished);
+            return;
+        }
         d->m_errorMessage = d->m_reply->errorString();
         qWarning() << "TmdbQt: tv season info request failed:" << d->m_reply->errorString()
                    << d->m_reply->url().toString();

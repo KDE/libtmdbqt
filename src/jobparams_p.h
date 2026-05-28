@@ -44,14 +44,30 @@ public:
 
     /**
      * Issues a GET request for @p url through the shared QNetworkAccessManager.
-     * Centralizes request setup so every job gets the same configuration
-     * (notably HTTP/2 disabled, see jobparams.cpp).
+     * Centralizes request setup so every job gets the same configuration:
+     * HTTP/2 disabled, hostname pre-resolved to IPv4 when possible (working
+     * around CDN IPv6 issues — see jobparams.cpp).
      */
     QNetworkReply *get(const QUrl &url) const;
+
+    /**
+     * If @p failedReply ended with a transient network error (connection reset,
+     * timeout, …) and @p retriesLeft > 0, decrements the counter, deletes the
+     * old reply, and returns a fresh reply for the same original URL. Otherwise
+     * returns nullptr and the caller should treat the failure as final.
+     * The caller is responsible for connecting the new reply's finished() signal.
+     */
+    QNetworkReply *retryIfTransient(QNetworkReply *failedReply, int &retriesLeft) const;
 
     QNetworkAccessManager &qnam;
     Configuration &configuration;
     QUrl baseUrl;
+
+private:
+    // Cached IPv4 for a given hostname, populated lazily on the first get() call.
+    // All TMDB API requests target one host, so a single-entry cache is enough.
+    mutable QString m_cachedHost;
+    mutable QString m_cachedIPv4;
 };
 
 } // namespace

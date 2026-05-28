@@ -40,6 +40,7 @@ public:
     PersonList m_cast;
     PersonList m_crew;
     const JobParams &m_params;
+    int m_retriesLeft = 1;
 };
 
 CreditsJob::CreditsJob(const JobParams &params, int movieId)
@@ -110,6 +111,11 @@ PersonList CreditsJob::crew() const
 void CreditsJob::requestFinished()
 {
     if (d->m_reply->error() != QNetworkReply::NoError) {
+        if (QNetworkReply *retry = d->m_params.retryIfTransient(d->m_reply, d->m_retriesLeft)) {
+            d->m_reply = retry;
+            connect(d->m_reply, &QNetworkReply::finished, this, &CreditsJob::requestFinished);
+            return;
+        }
         d->m_errorMessage = d->m_reply->errorString();
         qWarning() << "TmdbQt: credits request failed:" << d->m_reply->errorString()
                    << d->m_reply->url().toString();

@@ -38,6 +38,7 @@ public:
     QString m_errorMessage;
     MovieDb m_result;
     const JobParams &m_params;
+    int m_retriesLeft = 1;
 };
 
 MovieInfoJob::MovieInfoJob(const JobParams &params, int movieId)
@@ -86,6 +87,11 @@ MovieDb MovieInfoJob::searchResult() const
 void MovieInfoJob::requestFinished()
 {
     if (d->m_reply->error() != QNetworkReply::NoError) {
+        if (QNetworkReply *retry = d->m_params.retryIfTransient(d->m_reply, d->m_retriesLeft)) {
+            d->m_reply = retry;
+            connect(d->m_reply, &QNetworkReply::finished, this, &MovieInfoJob::requestFinished);
+            return;
+        }
         d->m_errorMessage = d->m_reply->errorString();
         qWarning() << "TmdbQt: movie info request failed:" << d->m_reply->errorString()
                    << d->m_reply->url().toString();

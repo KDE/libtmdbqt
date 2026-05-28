@@ -40,6 +40,7 @@ public:
     QString m_errorMessage;
     TvShowDb m_result;
     const JobParams &m_params;
+    int m_retriesLeft = 1;
 };
 
 TvShowInfoJob::TvShowInfoJob(const JobParams &params, int tvid)
@@ -98,6 +99,11 @@ TvShowDb TvShowInfoJob::searchResult() const
 void TvShowInfoJob::requestFinished()
 {
     if (d->m_reply->error() != QNetworkReply::NoError) {
+        if (QNetworkReply *retry = d->m_params.retryIfTransient(d->m_reply, d->m_retriesLeft)) {
+            d->m_reply = retry;
+            connect(d->m_reply, &QNetworkReply::finished, this, &TvShowInfoJob::requestFinished);
+            return;
+        }
         d->m_errorMessage = d->m_reply->errorString();
         qWarning() << "TmdbQt: tv show info request failed:" << d->m_reply->errorString()
                    << d->m_reply->url().toString();
