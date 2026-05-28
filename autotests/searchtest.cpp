@@ -107,7 +107,7 @@ void SearchTest::testTvSearch()
     QVERIFY(spy.wait());
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
     TvShowDbList tvshows = job->searchResult();
-    QCOMPARE(tvshows.count(), 1);
+    QCOMPARE_GE(tvshows.count(), 1); // server now returns multiple fuzzy matches (e.g. "Breaking Bad - GTAV Series")
     TvShowDb tvshow = tvshows.first();
     QCOMPARE(tvshow.id(), 1396);
     QCOMPARE(tvshow.firstAiredDate(), QDate(2008, 1, 20));
@@ -159,7 +159,7 @@ void SearchTest::testTvShowInfo()
     QVERIFY2(!job->hasError(), qPrintable(job->errorMessage()));
 
     TvShowDb tvshow = job->searchResult();
-    QCOMPARE(tvshow.overview(), QStringLiteral("When Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime."));
+    QCOMPARE(tvshow.overview(), QStringLiteral("Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime."));
 
     TvSeasonDbList seasons = tvshow.seasons();
     QCOMPARE(seasons.size(), 6);
@@ -171,7 +171,7 @@ void SearchTest::testTvShowInfo()
     QCOMPARE(seasons[4].seasonNumber(), 4);
     QCOMPARE(seasons[5].seasonNumber(), 5);
 
-    QCOMPARE(seasons[0].airDate(), QDate(2009, 2, 16));
+    QCOMPARE(seasons[0].airDate(), QDate(2009, 2, 17));
     QCOMPARE(seasons[1].airDate(), QDate(2008, 1, 20));
     QCOMPARE(seasons[2].airDate(), QDate(2009, 3, 8));
     QCOMPARE(seasons[3].airDate(), QDate(2010, 3, 21));
@@ -223,11 +223,14 @@ void SearchTest::testCredits()
     // TODO profileUrl
 
     const PersonList crew = job->crew();
-    QCOMPARE(crew.count(), 11);
-    const Person firstCrew = crew.at(0);
-    QCOMPARE(firstCrew.name(), QStringLiteral("Olivier Delbosc"));
-    QCOMPARE(firstCrew.department(), QStringLiteral("Production"));
-    QCOMPARE(firstCrew.job(), QStringLiteral("Producer"));
+    QCOMPARE_GE(crew.count(), 11);
+    // Crew ordering from the API is not stable, look up by name.
+    auto it = std::find_if(crew.begin(), crew.end(), [](const Person &p) {
+        return p.name() == QLatin1String("Olivier Delbosc");
+    });
+    QVERIFY(it != crew.end());
+    QCOMPARE(it->department(), QStringLiteral("Production"));
+    QCOMPARE(it->job(), QStringLiteral("Producer"));
 }
 
 void SearchTest::testEpisodeCredits()
@@ -239,7 +242,7 @@ void SearchTest::testEpisodeCredits()
     const PersonList cast = job->cast();
     QCOMPARE(cast.count(), 6);
     const PersonList crew = job->crew();
-    QCOMPARE(crew.count(), 4);
+    QCOMPARE(crew.count(), 8);
 }
 
 QTEST_MAIN(SearchTest)
