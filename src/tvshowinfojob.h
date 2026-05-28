@@ -34,7 +34,7 @@ class TheMovieDbApi;
 class TvShowInfoJobPrivate;
 class JobParams;
 
-class TvShowInfoJob : public QObject
+class TMDBQT_EXPORT TvShowInfoJob : public QObject
 {
     Q_OBJECT
 public:

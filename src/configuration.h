@@ -27,7 +27,7 @@ class QJsonObject;
 
 namespace TmdbQt
 {
-class Configuration
+class TMDBQT_EXPORT Configuration
 {
 public:
     void load(const QJsonObject &json);

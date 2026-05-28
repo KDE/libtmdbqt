@@ -34,7 +34,7 @@ class TheMovieDbApi;
 class TvSeasonInfoJobPrivate;
 class JobParams;
 
-class TvSeasonInfoJob : public QObject
+class TMDBQT_EXPORT TvSeasonInfoJob : public QObject
 {
     Q_OBJECT
 public:

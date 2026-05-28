@@ -31,7 +31,7 @@ namespace TmdbQt
 class TvShowDb;
 class Configuration;
 
-class TvSeasonDbList : public QList<TvSeasonDb>
+class TMDBQT_EXPORT TvSeasonDbList : public QList<TvSeasonDb>
 {
 private:
     friend class TvShowDb;
