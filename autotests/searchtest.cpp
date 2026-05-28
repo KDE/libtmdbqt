@@ -43,6 +43,7 @@ public:
     SearchTest();
 
 private slots:
+    void testInit();
     void testSearch();
     void testTvSearch();
     void testMovieInfo();
@@ -60,6 +61,10 @@ static const char s_key[] = "6c125ca74f059b4c88bc49e1b09e241e"; // themoviedb.or
 
 SearchTest::SearchTest()
     : m_api(QString::fromLatin1(s_key))
+{
+}
+
+void SearchTest::testInit()
 {
     QVERIFY(!m_api.isInitialized());
     QSignalSpy initSpy(&m_api, &TheMovieDbApi::initialized);

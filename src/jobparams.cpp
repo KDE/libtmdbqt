@@ -26,6 +26,7 @@ using namespace TmdbQt;
 
 QNetworkReply *JobParams::get(const QUrl &url) const
 {
+    qDebug() << "GET" << url;
     QNetworkRequest request(url);
     // Qt 6 enables HTTP/2 by default. Concurrent HTTP/2 streams to
     // api.themoviedb.org (e.g. one request per TV season, fired in parallel)
